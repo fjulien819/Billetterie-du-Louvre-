@@ -163,6 +163,35 @@ class OrderTickets
         return $this->totalPrice;
     }
 
+    /**
+     * @Assert\Callback()
+     */
+    public function  validate(ExecutionContextInterface $context)
+    {
+        $limiteTime = new \DateTime();
+        $limiteTime->setTime(14,0,0);
 
+        $currentDate = new \DateTime();
+
+
+        // si la valeur coorespond a aujourd'hui
+        if ($currentDate->format('Y-m-d') === $this->getVisiteDay()->format('Y-m-d'))
+        {
+
+            if ($currentDate->format('H:i:s') > $limiteTime->format('H:i:s'))
+            {
+                if ($this->getTicketType() === "journee" )
+                {
+
+                    $context->buildViolation("Pour une commande le jour même, les billets journées ne sont plus disponible une fois 14h passées")
+                        ->atPath('ticketType')
+                        ->addViolation();
+
+                }
+
+            }
+
+        }
+    }
 }
 
