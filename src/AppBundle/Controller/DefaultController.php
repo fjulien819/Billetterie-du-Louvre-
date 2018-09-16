@@ -6,6 +6,7 @@ use AppBundle\Entity\OrderTickets;
 use AppBundle\Entity\Ticket;
 use AppBundle\Form\OrderTicketsType;
 use AppBundle\Form\TicketType;
+use AppBundle\Services\Cart\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +20,10 @@ class DefaultController extends Controller
      * @Route("/", name="homepage")
      */
 
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, Cart $cart)
     {
+
+        $cart->deleteCart();
 
         $order = new OrderTickets;
         $form = $this->createForm(OrderTicketsType::class, $order);
@@ -45,7 +48,7 @@ class DefaultController extends Controller
     /**
      * @Route("/order", name="orderPage")
      */
-    public function orderAction(Request $request)
+    public function orderAction(Request $request, Cart $cart)
     {
         $session = $request->getSession();
 
@@ -63,36 +66,17 @@ class DefaultController extends Controller
             if ($request->isMethod("POST") && $form->isValid())
             {
 
-
-                if ($session->has("tickets"))
-                {
-
-                   $tickets = $session->get("tickets");
-                   array_push($tickets, $ticket );
-
+                $cart->addTicket($ticket);
+                dump($cart->getCart());
 
                 }
 
-                else
-                    {
-
-                        $tickets = array();
-                        array_push($tickets, $ticket);
-                }
-
-                $session->set("tickets", $tickets);
-
-
-
-
-
-            }
-
-
-dump($session->get("tickets"));
 
             return $this->render('default/index.html.twig', array('form' => $form->createView(),
             ));
+
+            }
+
 
 
             /*
@@ -100,13 +84,14 @@ dump($session->get("tickets"));
                 '<html><body>Page Order</body></html>'
             );
             */
-        }
-
-
-
-
-
         return $this->redirectToRoute("homepage");
     }
+
+
+
+
+
+
+
 
 }

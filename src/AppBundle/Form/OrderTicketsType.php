@@ -22,7 +22,7 @@ class OrderTicketsType extends AbstractType
         $builder
             ->add('nbrTickets', IntegerType::class, array(
                 'required' => true,
-                'attr' => array('min' => 0),
+                'attr' => array('min' => 1),
                 'label' => 'Nombre de billets souhaités',
             ))
             ->add('visiteDay', DateType::class, array(
