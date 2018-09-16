@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Ticket
  *
@@ -24,12 +24,19 @@ class Ticket
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
+     *
      * @ORM\Column(name="name", type="string", length=255)
+     *
      */
     private $name;
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      *
      * @ORM\Column(name="lastName", type="string", length=255)
      */
@@ -38,12 +45,16 @@ class Ticket
     /**
      * @var string
      *
+     * @Assert\Country()
+     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var \DateTime
+     *
+     * @Assert\Date()
      *
      * @ORM\Column(name="birthDate", type="datetime")
      */
@@ -59,6 +70,8 @@ class Ticket
     /**
      * @var \stdClass
      *
+     * @Assert\Type(type="object")
+     *
      * @ORM\Column(name="orderTickets", type="object")
      * @ORM\ManyToOne(targetEntity="Ticket")
      *
@@ -67,6 +80,8 @@ class Ticket
 
     /**
      * @var int
+     *
+     * @Assert\Type(type="int")
      *
      * @ORM\Column(name="price", type="integer")
      */

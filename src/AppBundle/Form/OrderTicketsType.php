@@ -39,9 +39,6 @@ class OrderTicketsType extends AbstractType
                 ),
                 'label' => 'Type de billet',
             ))
-            ->add("save", submitType::class, array(
-                'label' => 'Valider',
-            ))
         ;
     }/**
      * {@inheritdoc}

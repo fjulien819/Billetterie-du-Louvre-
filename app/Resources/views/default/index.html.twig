@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form(form) }}
+    {{ form_start(form) }}
+
+
+    {{ form_rest(form) }}
+    <button type="submit">Valider</button>
+    {{ form_end(form) }}
 
 {% endblock %}
 
