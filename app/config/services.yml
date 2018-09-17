@@ -34,7 +34,16 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    AppBundle\Services\PriceCalculator\PriceCalculator:
+        arguments:
+            - "@session"
+
     AppBundle\Services\Cart\Cart:
-            arguments:
+        arguments:
             - "@request_stack"
+
+
+
+
+
 

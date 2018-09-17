@@ -10,19 +10,21 @@ namespace AppBundle\Services\Cart;
 
 
 use AppBundle\Entity\Ticket;
+use AppBundle\Services\PriceCalculator\PriceCalculator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cart
 {
     private $session;
     private $order;
+    private $priceCalculator;
 
 
-    public function __construct(RequestStack $request)
+    public function __construct(RequestStack $request, PriceCalculator $priceCalculator)
     {
         $this->session = $request->getCurrentRequest()->getSession();
         $this->order = $this->session->get("order");
-
+        $this->priceCalculator = $priceCalculator;
     }
 
     public function addTicket(Ticket $ticket)
@@ -30,12 +32,14 @@ class Cart
 
        $nbrTickets = $this->order->getNbrTickets();
 
+
         if ($this->isCart())
         {
             $cart = $this->getCart();
 
             if (count($cart) < $nbrTickets)
             {
+                $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
                 dump(count($cart));
                array_push($cart, $ticket);
                $this->session->set("cart", $cart);
@@ -46,6 +50,7 @@ class Cart
         else
         {
             $cart = array();
+            $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
             array_push($cart, $ticket);
             $this->session->set("cart", $cart);
         }
