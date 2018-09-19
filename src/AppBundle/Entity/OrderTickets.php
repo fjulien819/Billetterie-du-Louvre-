@@ -13,6 +13,7 @@ use AppBundle\Validator\Constraints as LouvreAssert;
  * @ORM\Table(name="order_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderTicketsRepository")
  * @LouvreAssert\CheckTicketType()
+ * @LouvreAssert\TicketLimitPerDay()
  */
 class OrderTickets
 {

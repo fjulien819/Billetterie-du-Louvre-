@@ -68,11 +68,11 @@ class Ticket
     private $reducedPrice;
 
     /**
-     * @var \stdClass
      *
-     * @Assert\Type(type="object")
      *
-     * @ORM\Column(name="orderTickets", type="object")
+     *
+     *
+     *
      * @ORM\ManyToOne(targetEntity="OrderTickets", inversedBy="tickets")
      *
      */

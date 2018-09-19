@@ -10,4 +10,18 @@ namespace AppBundle\Repository;
  */
 class TicketRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getNbrTickets(\DateTime $date)
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        $qb
+            ->leftJoin('t.orderTickets', 'o')
+            ->addSelect('o')
+            ->where('o.visiteDay = :date')
+            ->setParameter('date', $date)
+
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }
