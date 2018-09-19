@@ -11,71 +11,60 @@ namespace AppBundle\Services\Cart;
 
 use AppBundle\Entity\Ticket;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
 {
     private $session;
-    private $order;
     private $priceCalculator;
 
 
-    public function __construct(RequestStack $request, PriceCalculator $priceCalculator)
+    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator, $email)
     {
-        $this->session = $request->getCurrentRequest()->getSession();
-        $this->order = $this->session->get("order");
+        $this->session = $session;
         $this->priceCalculator = $priceCalculator;
     }
 
     public function addTicket(Ticket $ticket)
     {
 
-       $nbrTickets = $this->order->getNbrTickets();
+        $nbrTickets = $this->getOrder()->getNbrTickets();
 
-
-        if ($this->isCart())
+        if (count($this->getOrder()->getTickets()) < $nbrTickets)
         {
-            $cart = $this->getCart();
-
-            if (count($cart) < $nbrTickets)
-            {
-                $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
-                dump(count($cart));
-               array_push($cart, $ticket);
-               $this->session->set("cart", $cart);
-
-            }
+            $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
+            $this->getOrder()->addTicket($ticket);
 
         }
         else
         {
-            $cart = array();
-            $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
-            array_push($cart, $ticket);
-            $this->session->set("cart", $cart);
+            dump("max de tickets");
         }
 
     }
 
-    public function isCart()
-    {
-        return $this->session->has("cart");
-    }
 
-    public function getCart()
+    public function getOrder()
     {
-        if ($this->isCart())
+
+        if ($this->session->has("order"))
         {
-            return $this->session->get("cart");
+            return $this->session->get("order");
         }
     }
 
     public function deleteCart()
     {
-        if ($this->isCart())
+        if ($this->session->has("order"))
         {
-            $this->session->remove("cart");
+            $this->session->remove("order");
         }
+
+    }
+
+    public function setOrder($order)
+    {
+        $this->session->set("order", $order);
     }
 
 

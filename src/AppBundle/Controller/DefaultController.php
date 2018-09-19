@@ -23,26 +23,25 @@ class DefaultController extends Controller
     public function indexAction(Request $request, Cart $cart)
     {
 
-        $cart->deleteCart();
+
+       // $cart->deleteCart();
 
         $order = new OrderTickets;
         $form = $this->createForm(OrderTicketsType::class, $order);
 
         $form->handleRequest($request);
 
-        if ($request->isMethod('POST') && $form->isValid())
+
+        if ($form->isSubmitted()&& $form->isValid())
         {
 
-            $session = $request->getSession();
-            $session->set("order", $order);
-
+            $cart->setOrder($order);
 
             return $this->redirectToRoute("orderPage");
         }
 
 
-        return $this->render('default/index.html.twig', array('form' => $form->createView(),
-        ));
+        return $this->render('default/index.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -50,40 +49,35 @@ class DefaultController extends Controller
      */
     public function orderAction(Request $request, Cart $cart)
     {
-        $session = $request->getSession();
 
-        if ($session->has("order"))
+
+
+        if ($cart->getOrder())
         {
 
             $ticket = new Ticket();
-            $ticket->setOrderTickets($session->get("order"));
+
+            $ticket->setOrderTickets($cart->getOrder());
 
             $form = $this->createForm(TicketType::class, $ticket);
 
             $form->handleRequest($request);
 
 
-            if ($request->isMethod("POST") && $form->isValid())
+            if ($form->isSubmitted() && $form->isValid())
             {
-
+               // $cart->getOrder()
+                ////$cart->addTicket($form->getData());
                 $cart->addTicket($ticket);
-                dump($cart->getCart());
+                dump($cart->getOrder());
 
                 }
-
 
             return $this->render('default/index.html.twig', array('form' => $form->createView(),
             ));
 
             }
 
-
-
-            /*
-            return new Response(
-                '<html><body>Page Order</body></html>'
-            );
-            */
         return $this->redirectToRoute("homepage");
     }
 

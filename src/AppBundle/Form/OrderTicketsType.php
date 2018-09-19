@@ -2,13 +2,15 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\OrderTickets;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 
 
@@ -39,6 +41,8 @@ class OrderTicketsType extends AbstractType
                 ),
                 'label' => 'Type de billet',
             ))
+
+
         ;
     }/**
      * {@inheritdoc}
@@ -46,7 +50,7 @@ class OrderTicketsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\OrderTickets'
+            'data_class' => OrderTickets::class
         ));
     }
 

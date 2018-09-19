@@ -5,14 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use AppBundle\Validator\Constraints as LouvreAssert;
 
 /**
  * OrderTickets
  *
  * @ORM\Table(name="order_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderTicketsRepository")
- * @LouvreAssert\CheckTicketType()
  */
 class OrderTickets
 {
@@ -170,44 +168,34 @@ class OrderTickets
     }
 
     /**
-     * Constructor
+     * @Assert\Callback()
      */
-    public function __construct()
+    public function  validate(ExecutionContextInterface $context)
     {
-        $this->tickets = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+        $limiteTime = new \DateTime();
+        $limiteTime->setTime(14,0,0);
 
-    /**
-     * Add ticket
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     *
-     * @return OrderTickets
-     */
-    public function addTicket(\AppBundle\Entity\Ticket $ticket)
-    {
-        $this->tickets[] = $ticket;
+        $currentDate = new \DateTime();
 
-        return $this;
-    }
 
-    /**
-     * Remove ticket
-     *
-     * @param \AppBundle\Entity\Ticket $ticket
-     */
-    public function removeTicket(\AppBundle\Entity\Ticket $ticket)
-    {
-        $this->tickets->removeElement($ticket);
-    }
+        // si la valeur coorespond a aujourd'hui
+        if ($currentDate->format('Y-m-d') === $this->getVisiteDay()->format('Y-m-d'))
+        {
 
-    /**
-     * Get tickets
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTickets()
-    {
-        return $this->tickets;
+            if ($currentDate->format('H:i:s') > $limiteTime->format('H:i:s'))
+            {
+                if ($this->getTicketType() === "journee" )
+                {
+
+                    $context->buildViolation("Pour une commande le jour même, les billets journées ne sont plus disponible une fois 14h passées")
+                        ->atPath('ticketType')
+                        ->addViolation();
+
+                }
+
+            }
+
+        }
     }
 }
+

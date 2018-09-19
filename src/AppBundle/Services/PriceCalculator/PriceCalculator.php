@@ -10,26 +10,37 @@ namespace AppBundle\Services\PriceCalculator;
 
 
 
+use AppBundle\Entity\OrderTickets;
 use AppBundle\Entity\Ticket;
-use Symfony\Component\HttpFoundation\Session\Session;
+
+
 
 
 class PriceCalculator
 {
-    private $order;
+
 
     const TARIF_ENFANT = "8";
     const TARIF_NORMAL = "16";
     const TARIF_SENIOR = "12";
     const TARIF_REDUIT = "10";
 
-    public function __construct(Session $session)
+
+    /*
+
+    public function computeOrderPrice(OrderTickets $order)
     {
-        $this->order = $session->get("order");
+        foreach($order-W>getTickets() as $ticket){
+            $totalPrice += $this->getTicketPrice($ticket);
+        }
+
     }
 
+    */
     public function getTicketPrice(Ticket $ticket)
     {
+
+        $order = $ticket->getOrderTickets();
 
         $price = self::TARIF_REDUIT;
 
@@ -40,7 +51,7 @@ class PriceCalculator
             $visiteDay = new \DateTime();
 
             $birthDate->setTimestamp($ticket->getBirthDate()->getTimestamp());
-            $visiteDay->setTimestamp($this->order->getVisiteDay()->getTimestamp());
+            $visiteDay->setTimestamp($order->getVisiteDay()->getTimestamp());
 
             $diff = $visiteDay->diff($birthDate)->format("%y%");
 

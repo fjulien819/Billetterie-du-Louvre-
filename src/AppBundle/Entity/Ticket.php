@@ -73,7 +73,7 @@ class Ticket
      * @Assert\Type(type="object")
      *
      * @ORM\Column(name="orderTickets", type="object")
-     * @ORM\ManyToOne(targetEntity="Ticket")
+     * @ORM\ManyToOne(targetEntity="OrderTickets", inversedBy="tickets")
      *
      */
     private $orderTickets;
