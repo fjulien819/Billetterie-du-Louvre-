@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+
+    {{ form_rest(form) }}
+
+    <a href="#" id="add_ticket">Ajouter un billet</a>
+    <button type="submit">Valider</button>
+
+    {{ form_end(form) }}
+
+{% endblock %}
