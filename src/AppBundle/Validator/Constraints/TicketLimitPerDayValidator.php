@@ -19,7 +19,7 @@ class TicketLimitPerDayValidator extends ConstraintValidator
 {
     private $em;
 
-    const LIMIT_TICKETS_PER_DAY = 0;
+    const LIMIT_TICKETS_PER_DAY = 1000;
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
