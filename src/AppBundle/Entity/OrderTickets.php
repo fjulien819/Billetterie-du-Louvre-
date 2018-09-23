@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Validator\Constraints as LouvreAssert;
 
 /**
@@ -39,6 +38,7 @@ class OrderTickets
      * @ORM\Column(name="visiteDay", type="datetime")
      * @Assert\Date()
      * @Assert\GreaterThanOrEqual("today")
+     * @LouvreAssert\IsHoliday()
      *
      */
     private $visiteDay;
@@ -47,6 +47,7 @@ class OrderTickets
      * @var string
      * @ORM\Column(name="ticketType", type="string", length=255)
      * @Assert\Choice({"journee", "demiJournee"})
+     *
      *
      */
     private $ticketType;
