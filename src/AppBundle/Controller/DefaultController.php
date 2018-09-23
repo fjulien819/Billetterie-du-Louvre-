@@ -35,7 +35,9 @@ class DefaultController extends Controller
 
             $cart->setOrder($order);
 
+
             return $this->redirectToRoute("orderPage");
+
         }
 
 
@@ -71,7 +73,7 @@ class DefaultController extends Controller
 
                 }
 
-            return $this->render('default/index.html.twig', array('form' => $form->createView(),
+            return $this->render('default/order.html.twig', array('form' => $form->createView(),
             ));
 
             }
