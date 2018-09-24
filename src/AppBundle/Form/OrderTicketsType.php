@@ -29,8 +29,11 @@ class OrderTicketsType extends AbstractType
             ))
             ->add('visiteDay', DateType::class, array(
                 'required' => true,
-                'widget' => "choice",
+                'widget' => "single_text",
                 'label' => 'Jour de la visite',
+
+
+
 
             ))
             ->add('ticketType', ChoiceType::class, array(

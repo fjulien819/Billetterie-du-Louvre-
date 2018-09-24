@@ -7,9 +7,13 @@
     {{ form_rest(form) }}
 
 
+
     <button type="submit" class="btn btn-dark">Valider</button>
 
     {{ form_end(form) }}
+
+    {{app.session.get('order').tickets|length}}/
+    {{app.session.get('order').nbrTickets}}
 
 {% endblock %}
 

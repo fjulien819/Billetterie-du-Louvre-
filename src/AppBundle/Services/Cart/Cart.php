@@ -28,9 +28,7 @@ class Cart
     public function addTicket(Ticket $ticket)
     {
 
-        $nbrTickets = $this->getOrder()->getNbrTickets();
-
-        if (count($this->getOrder()->getTickets()) < $nbrTickets)
+        if (!$this->fullCart())
         {
             $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
             $this->getOrder()->addTicket($ticket);
@@ -42,7 +40,6 @@ class Cart
         }
 
     }
-
 
     public function getOrder()
     {
@@ -67,5 +64,13 @@ class Cart
         $this->session->set("order", $order);
     }
 
-
+    public function fullCart()
+    {
+        $nbrTickets = $this->getOrder()->getNbrTickets();
+        if (count($this->getOrder()->getTickets()) < $nbrTickets)
+        {
+            return false;
+        }
+        return true;
+    }
 }
