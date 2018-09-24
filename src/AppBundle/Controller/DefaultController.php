@@ -9,6 +9,7 @@ use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
@@ -69,9 +70,12 @@ class DefaultController extends Controller
                // $cart->getOrder()
                 ////$cart->addTicket($form->getData());
                 $cart->addTicket($ticket);
-                dump($cart->getOrder());
 
-                }
+                if ($cart->fullCart())
+               {
+                   return $this->redirectToRoute("summaryPage");
+               }
+            }
 
             return $this->render('default/order.html.twig', array('form' => $form->createView(),
             ));
@@ -81,6 +85,15 @@ class DefaultController extends Controller
         return $this->redirectToRoute("homepage");
     }
 
+    /**
+     * @Route("/summary", name="summaryPage")
+     */
+    public function summaryAction(Cart $cart)
+    {
+        dump($cart->getOrder());
+        return new Response("page recap");
+
+    }
 
 
 
