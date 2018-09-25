@@ -12,11 +12,11 @@ namespace AppBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class IsTuesdayValidator extends ConstraintValidator
+class IsSundayValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        if ($value->format('D') === "Tue") {
+        if ($value->format('D') === "Sun") {
             $this->context->buildViolation($constraint->message)
                 ->atPath('visiteDay')
                 ->addViolation();

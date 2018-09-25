@@ -17,6 +17,7 @@ class TicketLimitPerDay extends Constraint
 {
 
     public $message = '{{ ticketForSale }} billet(s) disponible(s) pour cette date';
+    public $limit;
 
     public function getTargets()
     {

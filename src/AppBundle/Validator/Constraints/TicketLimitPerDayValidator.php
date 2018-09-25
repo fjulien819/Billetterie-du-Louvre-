@@ -11,6 +11,7 @@ namespace AppBundle\Validator\Constraints;
 
 
 use AppBundle\Entity\Ticket;
+use AppBundle\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -19,30 +20,31 @@ class TicketLimitPerDayValidator extends ConstraintValidator
 {
     private $em;
 
-    const LIMIT_TICKETS_PER_DAY = 1000;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
     public function validate($value, Constraint $constraint)
     {
-        $em = $this->em->getRepository(Ticket::class);
-        $nbrTicket =  count($em->getNbrTickets($value->getVisiteDay()));
+        /** @var TicketRepository $repo */
+        $repo = $this->em->getRepository(Ticket::class);
+        $nbrTicket =  count($repo->getNbrTickets($value->getVisiteDay()));
 
         //si limit 0 ticketforSale = negatif
-        if (self::LIMIT_TICKETS_PER_DAY === 0)
+        if ($constraint->limit === 0)
         {
             $ticketForSale = 0;
         }
         else
         {
-            $ticketForSale = self::LIMIT_TICKETS_PER_DAY - $nbrTicket ;
+            $ticketForSale = $constraint->limit - $nbrTicket ;
         }
 
 
         $nbrTicket += $value->getNbrTickets();
 
-        if ($nbrTicket > self::LIMIT_TICKETS_PER_DAY)
+        if ($nbrTicket > $constraint->limit)
         {
 
             $this->context->buildViolation($constraint->message)

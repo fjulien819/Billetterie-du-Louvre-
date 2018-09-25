@@ -7,9 +7,12 @@
  */
 
 namespace AppBundle\Validator\Constraints;
+use Symfony\Component\Validator\Constraint;
 
-
-class isTuesday
+/**
+ * @Annotation
+ */
+class IsTuesday extends Constraint
 {
-
+    public $message = "Réservation impossible pour ce jour";
 }

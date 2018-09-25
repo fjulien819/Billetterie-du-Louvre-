@@ -15,5 +15,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsHoliday extends Constraint
 {
-    public $message = "Réservation impossible: {{ string }}";
+    public $message = "Réservation impossible pour cette date";
 }

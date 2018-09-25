@@ -17,36 +17,53 @@ class IsHolidayValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        // Calcul de la date de Pâques
-        $orderYear = $value->format('Y');
-        $easterDate = date("d/m", easter_date($orderYear));
+        // Jour fériés
+        $year = $value->format('Y');
 
-        // Jours de fermeture du musée
-        $LouvreClosed = array("01/05", "01/11", "25/12", "Tue");
+        if ($year <= 2037)
+        {
+            $easterDate = easter_date($year);
+            $easterDay = date('j', $easterDate);
+            $easterMonth = date('n', $easterDate);
+            $easterYear = date('Y', $easterDate);
 
-        // Dates à laquelles les billets ne sont pas disponibles
-        $publicHolidays = array("01/01", "08/05", "14/01", "15/08", "11/11", $easterDate, "Sun");
+            $publicHolidays = array(
+                // Jours feries fixes
+                mktime(0, 0, 0, 1, 1, $year),// 1er janvier
+                mktime(0, 0, 0, 5, 1, $year),// Fete du travail
+                mktime(0, 0, 0, 5, 8, $year),// Victoire des allies
+                mktime(0, 0, 0, 7, 14, $year),// Fete nationale
+                mktime(0, 0, 0, 8, 15, $year),// Assomption
+                mktime(0, 0, 0, 11, 1, $year),// Toussaint
+                mktime(0, 0, 0, 11, 11, $year),// Armistice
+                mktime(0, 0, 0, 12, 25, $year),// Noel
 
+                // Jour feries qui dependent de paques
+                mktime(0, 0, 0, $easterMonth, $easterDay + 1, $easterYear),// Lundi de paques
+                mktime(0, 0, 0, $easterMonth, $easterDay + 40, $easterYear),// Ascension
+                mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear), // Pentecote
+            );
 
-        foreach ($LouvreClosed as $day) {
-            if (($value->format('D') === $day) OR ($value->format('d/m') === $day)) {
+            //Date de commande
+            $orderDate = $value->getTimestamp();
+
+            if (in_array($orderDate, $publicHolidays))
+            {
                 $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ string }}', 'Le musée est fermé le 1er mai, le 1er novembre, le 25 décembre ainsi que tous les mardis.')
                     ->atPath('visiteDay')
                     ->addViolation();
             }
 
-        }
-
-        foreach ($publicHolidays as $day) {
-            if (($value->format('D') === $day) OR ($value->format('d/m') === $day)) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ string }}', 'L\'achat de billets pour les jours fériés, ainsi que les dimanches, n\'est pas disponible.')
-                    ->atPath('visiteDay')
-                    ->addViolation();
-            }
 
         }
+         else
+        {
+            $this->context->buildViolation($constraint->message)
+                ->atPath('visiteDay')
+                ->addViolation();
+        }
+
+
     }
 
 }
