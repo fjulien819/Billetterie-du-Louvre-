@@ -23,18 +23,14 @@ class DefaultController extends Controller
     {
 
 
-       // $cart->deleteCart();
-
-        $order = new OrderTickets;
-        $form = $this->createForm(OrderTicketsType::class, $order);
+        $form = $this->createForm(OrderTicketsType::class);
 
         $form->handleRequest($request);
 
 
-        if ($form->isSubmitted()&& $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            $cart->setOrder($order);
+            $cart->setOrder($form->getData());
 
 
             return $this->redirectToRoute("orderPage");
@@ -50,39 +46,28 @@ class DefaultController extends Controller
      */
     public function orderAction(Request $request, Cart $cart)
     {
+        $form = $this->createForm(TicketType::class, $cart->generateTicket());
+
+        $form->handleRequest($request);
 
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $cart->getOrder()
+            ////$cart->addTicket($form->getData());
+            ///
 
-        if ($cart->getOrder())
-        {
+            $cart->addTicket($form->getData());
 
-            $ticket = new Ticket();
-
-            $ticket->setOrderTickets($cart->getOrder());
-
-            $form = $this->createForm(TicketType::class, $ticket);
-
-            $form->handleRequest($request);
-
-
-            if ($form->isSubmitted() && $form->isValid())
-            {
-               // $cart->getOrder()
-                ////$cart->addTicket($form->getData());
-                $cart->addTicket($ticket);
-
-                if ($cart->fullCart())
-               {
-                   return $this->redirectToRoute("summaryPage");
-               }
+            if ($cart->fullCart()) {
+                return $this->redirectToRoute("summaryPage");
+            }else{
+                return $this->redirectToRoute('orderPage');
             }
+        }
 
-            return $this->render('default/order.html.twig', array('form' => $form->createView(),
-            ));
+        return $this->render('default/order.html.twig', array('form' => $form->createView(),
+        ));
 
-            }
-
-        return $this->redirectToRoute("homepage");
     }
 
     /**
@@ -90,15 +75,13 @@ class DefaultController extends Controller
      */
     public function summaryAction(Cart $cart)
     {
-        dump($cart->getOrder());
-        return new Response("page recap");
+
+        $order = $cart->getOrder();
+
+
+        return $this->render('default/summary.html.twig', array("order" => $order));
 
     }
-
-
-
-
-
 
 
 }

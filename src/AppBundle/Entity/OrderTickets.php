@@ -12,10 +12,15 @@ use AppBundle\Validator\Constraints as LouvreAssert;
  * @ORM\Table(name="order_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderTicketsRepository")
  * @LouvreAssert\CheckTicketType()
- * @LouvreAssert\TicketLimitPerDay()
+ * @LouvreAssert\TicketLimitPerDay(limit="1000")
  */
 class OrderTickets
 {
+    const TYPE_FULL_DAY = "journee";
+    const TYPE_HALF_DAY = "demiJournee";
+    const MIN_TICKETS_COUNT = 1;
+
+
     /**
      * @var int
      *
@@ -38,7 +43,10 @@ class OrderTickets
      * @ORM\Column(name="visiteDay", type="datetime")
      * @Assert\Date()
      * @Assert\GreaterThanOrEqual("today")
+     * @LouvreAssert\IsSunday()
+     * @LouvreAssert\IsTuesday()
      * @LouvreAssert\IsHoliday()
+     *
      *
      */
     private $visiteDay;

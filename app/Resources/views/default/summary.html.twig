@@ -1,14 +1,15 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
 
-
-    {{ form_rest(form) }}
-
-    <a href="#" id="add_ticket">Ajouter un billet</a>
-    <button type="submit">Valider</button>
-
-    {{ form_end(form) }}
-
+    {% for ticket in order.tickets %}
+        <li>
+            {{ ticket.name }}
+            {{ ticket.lastName }}
+            {{ ticket.country }}
+            {{ ticket.birthDate|date("d/m/Y") }}
+            {{ ticket.reducedPrice }}
+            {{ ticket.price }}
+        </li>
+    {% endfor %}
 {% endblock %}

@@ -24,7 +24,7 @@ class OrderTicketsType extends AbstractType
         $builder
             ->add('nbrTickets', IntegerType::class, array(
                 'required' => true,
-                'attr' => array('min' => 1),
+                'attr' => array('min' => OrderTickets::MIN_TICKETS_COUNT),
                 'label' => 'Nombre de billets souhaités',
             ))
             ->add('visiteDay', DateType::class, array(
@@ -32,15 +32,12 @@ class OrderTicketsType extends AbstractType
                 'widget' => "single_text",
                 'label' => 'Jour de la visite',
 
-
-
-
             ))
             ->add('ticketType', ChoiceType::class, array(
                 'required' => true,
                 'choices' => array(
-                    'Billet Journée' => "journee",
-                    'Billet Demi-journée' => "demiJournee",
+                    'Billet Journée' => OrderTickets::TYPE_FULL_DAY,
+                    'Billet Demi-journée' => OrderTickets::TYPE_HALF_DAY,
                 ),
                 'label' => 'Type de billet',
             ))
