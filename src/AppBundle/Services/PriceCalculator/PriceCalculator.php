@@ -76,4 +76,16 @@ class PriceCalculator
         return $price;
 
     }
+
+    public function computeTotalPrice(OrderTickets $order)
+    {
+        $totalPrice = 0;
+
+        foreach ($order->getTickets() as $ticket)
+        {
+         $totalPrice += $ticket->getPrice();
+        }
+
+        $order->setTotalPrice($totalPrice);
+    }
 }

@@ -21,12 +21,14 @@
         <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_fMHtDjtUDViWaYUNBDIprQMM"
-                data-amount="999"
+                data-amount= "{{ order.totalPrice * 100 }} "
                 data-name="Stripe.com"
                 data-description="Billetterie du Louvre"
                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                 data-locale="auto"
-                data-zip-code="false">
+                data-zip-code="false"
+                data-currency="eur">
+
         </script>
     </form>
 {% endblock %}
