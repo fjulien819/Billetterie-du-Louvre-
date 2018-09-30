@@ -7,11 +7,12 @@ use AppBundle\Entity\Ticket;
 use AppBundle\Form\OrderTicketsType;
 use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
+use Stripe\Charge;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Stripe\Stripe;
 class DefaultController extends Controller
 {
 
@@ -78,10 +79,39 @@ class DefaultController extends Controller
 
         $order = $cart->getOrder();
 
-
         return $this->render('default/summary.html.twig', array("order" => $order));
 
     }
 
+    /**
+     * @Route("/checkout", name="order_checkout")
+     */
+    public function checkoutAction(Request $request)
+    {
+        Stripe::setApiKey("sk_test_PvRPdtQtuQZNAhoJeQvKg65o");
+        $token =  $request->get('stripeToken');
+        $email = $request->get('stripeEmail');
+
+        try
+        {
+            $charge = Charge::create([
+                'amount' => 100,
+                'currency' => 'EUR',
+                'description' => 'Billetterie du Louvre',
+                'source' => $token,
+            ]);
+
+            $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
+            return $this->redirectToRoute("homepage");
+        }
+        catch(\Exception $e) {
+
+
+        }
+
+        $this->addFlash("checkout", "Le paiement a échoué");
+        return $this->redirectToRoute("summaryPage");
+
+    }
 
 }

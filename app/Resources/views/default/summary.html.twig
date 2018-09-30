@@ -1,6 +1,11 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
+    {% for flashMessage in app.session.flashbag.get('checkout') %}
+
+        {{ flashMessage }}
+
+    {% endfor %}
 
     {% for ticket in order.tickets %}
         <li>
@@ -12,4 +17,16 @@
             {{ ticket.price }}
         </li>
     {% endfor %}
+    <form action="{{ path('order_checkout') }}" method="POST">
+        <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_fMHtDjtUDViWaYUNBDIprQMM"
+                data-amount="999"
+                data-name="Stripe.com"
+                data-description="Billetterie du Louvre"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-zip-code="false">
+        </script>
+    </form>
 {% endblock %}
