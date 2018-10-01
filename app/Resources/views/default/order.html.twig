@@ -1,15 +1,17 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
+    Billet n° {{order().tickets|length + 1 }} / {{order().nbrTickets}}
+
     {{ form_start(form,{attr:{autocomplete:"off"}}) }}
 
+        <button type="submit" class="btn btn-dark">Ajouter ce billet</button>
 
-    <button type="submit" class="btn btn-dark">Valider</button>
+
 
     {{ form_end(form) }}
 
-    {{app.session.get('order').tickets|length}}/
-    {{app.session.get('order').nbrTickets}}
+
 
 {% endblock %}
 

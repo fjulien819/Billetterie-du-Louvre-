@@ -41,6 +41,12 @@ services:
             $email:  "toto@toto.com"
 
 
+    AppBundle\Twig\OrderExtension:
+
+        tags:
+          - { name: twig.extension }
+
+
 
 
 
