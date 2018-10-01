@@ -2,18 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\OrderTickets;
-use AppBundle\Entity\Ticket;
-use AppBundle\Form\OrderTicketsType;
+use AppBundle\Form\InitOrderType;
 use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
+use Stripe\Charge;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Stripe\Stripe;
-use Stripe\Charge;
 
 class DefaultController extends Controller
 {
@@ -26,7 +23,7 @@ class DefaultController extends Controller
     {
 
 
-        $form = $this->createForm(OrderTicketsType::class);
+        $form = $this->createForm(InitOrderType::class);
 
         $form->handleRequest($request);
 
@@ -46,6 +43,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/order", name="orderPage")
+     * @param Request $request
+     * @param Cart $cart
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function orderAction(Request $request, Cart $cart)
     {
@@ -75,6 +75,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/summary", name="summaryPage")
+     * @param Cart $cart
+     * @param PriceCalculator $priceCalculator
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function summaryAction(Cart $cart, PriceCalculator $priceCalculator)
     {
@@ -87,6 +90,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/checkout", name="order_checkout")
+     * @param Request $request
+     * @param Cart $cart
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function checkoutAction(Request $request, Cart $cart)
     {

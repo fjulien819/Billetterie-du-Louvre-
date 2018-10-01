@@ -7,14 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Validator\Constraints as LouvreAssert;
 
 /**
- * OrderTickets
+ * Order
  *
  * @ORM\Table(name="order_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderTicketsRepository")
  * @LouvreAssert\CheckTicketType()
  * @LouvreAssert\TicketLimitPerDay(limit="1000")
  */
-class OrderTickets
+class Order
 {
     const TYPE_FULL_DAY = "journee";
     const TYPE_HALF_DAY = "demiJournee";
@@ -88,7 +88,7 @@ class OrderTickets
      *
      * @param integer $nbrTickets
      *
-     * @return OrderTickets
+     * @return Order
      */
     public function setNbrTickets($nbrTickets)
     {
@@ -112,7 +112,7 @@ class OrderTickets
      *
      * @param \DateTime $visiteDay
      *
-     * @return OrderTickets
+     * @return Order
      */
     public function setVisiteDay($visiteDay)
     {
@@ -136,7 +136,7 @@ class OrderTickets
      *
      * @param string $ticketType
      *
-     * @return OrderTickets
+     * @return Order
      */
     public function setTicketType($ticketType)
     {
@@ -160,7 +160,7 @@ class OrderTickets
      *
      * @param integer $totalPrice
      *
-     * @return OrderTickets
+     * @return Order
      */
     public function setTotalPrice($totalPrice)
     {
@@ -190,11 +190,11 @@ class OrderTickets
     /**
      * Add ticket
      *
-     * @param \AppBundle\Entity\Ticket $ticket
+     * @param Ticket $ticket
      *
-     * @return OrderTickets
+     * @return Order
      */
-    public function addTicket(\AppBundle\Entity\Ticket $ticket)
+    public function addTicket(Ticket $ticket)
     {
         $this->tickets[] = $ticket;
 
@@ -204,9 +204,9 @@ class OrderTickets
     /**
      * Remove ticket
      *
-     * @param \AppBundle\Entity\Ticket $ticket
+     * @param Ticket $ticket
      */
-    public function removeTicket(\AppBundle\Entity\Ticket $ticket)
+    public function removeTicket(Ticket $ticket)
     {
         $this->tickets->removeElement($ticket);
     }

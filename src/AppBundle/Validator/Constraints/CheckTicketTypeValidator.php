@@ -9,7 +9,7 @@
 namespace AppBundle\Validator\Constraints;
 
 
-use AppBundle\Entity\OrderTickets;
+use AppBundle\Entity\Order;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -42,7 +42,7 @@ class CheckTicketTypeValidator extends ConstraintValidator
 
             if ($this->currentDate->format('H:i:s') > $this->limitTime->format('H:i:s'))
             {
-                if ($object->getTicketType() === OrderTickets::TYPE_FULL_DAY)
+                if ($object->getTicketType() === Order::TYPE_FULL_DAY)
                 {
 
                    $this->context->buildViolation($constraint->message)

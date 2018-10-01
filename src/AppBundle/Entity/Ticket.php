@@ -73,7 +73,7 @@ class Ticket
      *
      *
      *
-     * @ORM\ManyToOne(targetEntity="OrderTickets", inversedBy="tickets")
+     * @ORM\ManyToOne(targetEntity="Order", inversedBy="tickets")
      *
      */
     private $orderTickets;

@@ -21,7 +21,7 @@ class TicketType extends AbstractType
         $builder
 
 
-            ->add('orderTickets', OrderTicketsType::class, array(
+            ->add('orderTickets', InitOrderType::class, array(
                 "disabled" => true
 
             ))

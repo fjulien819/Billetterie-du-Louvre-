@@ -10,7 +10,7 @@ namespace AppBundle\Services\PriceCalculator;
 
 
 
-use AppBundle\Entity\OrderTickets;
+use AppBundle\Entity\Order;
 use AppBundle\Entity\Ticket;
 
 
@@ -28,7 +28,7 @@ class PriceCalculator
 
     /*
 
-    public function computeOrderPrice(OrderTickets $order)
+    public function computeOrderPrice(Order $order)
     {
         foreach($order-W>getTickets() as $ticket){
             $totalPrice += $this->getTicketPrice($ticket);
@@ -77,7 +77,7 @@ class PriceCalculator
 
     }
 
-    public function computeTotalPrice(OrderTickets $order)
+    public function computeTotalPrice(Order $order)
     {
         $totalPrice = 0;
 

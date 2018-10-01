@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\OrderTickets;
+use AppBundle\Entity\Order;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -14,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 
-class OrderTicketsType extends AbstractType
+class InitOrderType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class OrderTicketsType extends AbstractType
         $builder
             ->add('nbrTickets', IntegerType::class, array(
                 'required' => true,
-                'attr' => array('min' => OrderTickets::MIN_TICKETS_COUNT),
+                'attr' => array('min' => Order::MIN_TICKETS_COUNT),
                 'label' => 'Nombre de billets souhaités',
             ))
             ->add('visiteDay', DateType::class, array(
@@ -36,8 +36,8 @@ class OrderTicketsType extends AbstractType
             ->add('ticketType', ChoiceType::class, array(
                 'required' => true,
                 'choices' => array(
-                    'Billet Journée' => OrderTickets::TYPE_FULL_DAY,
-                    'Billet Demi-journée' => OrderTickets::TYPE_HALF_DAY,
+                    'Billet Journée' => Order::TYPE_FULL_DAY,
+                    'Billet Demi-journée' => Order::TYPE_HALF_DAY,
                 ),
                 'label' => 'Type de billet',
             ))
@@ -50,7 +50,7 @@ class OrderTicketsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => OrderTickets::class
+            'data_class' => Order::class
         ));
     }
 
