@@ -10,6 +10,7 @@ namespace AppBundle\Services\Cart;
 
 
 use AppBundle\Entity\Ticket;
+use AppBundle\Services\Checkout\Checkout;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,12 +22,14 @@ class Cart
 
     private $session;
     private $priceCalculator;
+    private $checkout;
 
 
-    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator, $email)
+    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator,Checkout $checkout, $email)
     {
         $this->session = $session;
         $this->priceCalculator = $priceCalculator;
+        $this->checkout = $checkout;
     }
 
     public function addTicket(Ticket $ticket)
@@ -98,6 +101,21 @@ class Cart
     {
         $ticket = new Ticket();
         return $ticket->setOrderTickets($this->getOrder());
+
+    }
+    public function payment($token, $description)
+    {
+        try
+        {
+            $totalPrice = $this->getOrder()->getTotalPrice();
+            $this->checkout->charge($token, $totalPrice, $description);
+            return true;
+        }
+        catch (\Exception $e)
+        {
+            $err  = $e->getMessage();
+            return $err;
+        }
 
     }
 }

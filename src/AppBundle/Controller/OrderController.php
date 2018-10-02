@@ -6,8 +6,6 @@ use AppBundle\Form\InitOrderType;
 use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
-use Stripe\Charge;
-use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,30 +85,19 @@ class OrderController extends Controller
 
         if ($request->isMethod('POST'))
         {
-
-            Stripe::setApiKey("sk_test_PvRPdtQtuQZNAhoJeQvKg65o");
             $token =  $request->get('stripeToken');
-            $email = $request->get('stripeEmail');
-            $totalPrice = $cart->getOrder()->getTotalPrice() * 100;
 
-            try
+            $payment = $cart->payment($token,"Billetterie du Louvre");
+
+            if ($payment === true)
             {
-                $charge = Charge::create([
-                    'amount' => $totalPrice,
-                    'currency' => 'EUR',
-                    'description' => 'Billetterie du Louvre',
-                    'source' => $token,
-                ]);
-
                 $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
                 return $this->redirectToRoute("homepage");
             }
-            catch(\Exception $e) {
 
-                $this->addFlash("checkout", "Le paiement a échoué");
-                return $this->redirectToRoute("summaryPage");
+            $this->addFlash("checkout", "Le paiement a échoué");
+            return $this->redirectToRoute("summaryPage");
 
-            }
 
         }
 

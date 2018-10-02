@@ -36,6 +36,10 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes: ['bootstrap_4_layout.html.twig']
+    globals:
+        stripe_publishable_key: pk_test_fMHtDjtUDViWaYUNBDIprQMM
+
+
 
 # Doctrine Configuration
 doctrine:

@@ -20,7 +20,7 @@
     <form action="{{ path('summaryPage') }}" method="POST">
         <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_test_fMHtDjtUDViWaYUNBDIprQMM"
+                data-key="{{ stripe_publishable_key }}"
                 data-amount= "{{ order().totalPrice * 100 }} "
                 data-name="Stripe.com"
                 data-description="Billetterie du Louvre"
