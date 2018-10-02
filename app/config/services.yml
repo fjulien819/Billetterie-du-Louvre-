@@ -47,13 +47,5 @@ services:
             ['%stripe_secret_key%']
 
 
-    AppBundle\Twig\OrderExtension:
-
-        tags:
-          - { name: twig.extension }
-
-
-
-
 
 

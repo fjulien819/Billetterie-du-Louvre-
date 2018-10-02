@@ -7,7 +7,7 @@
 
     {% endfor %}
 
-    {% for ticket in order().tickets %}
+    {% for ticket in order.tickets %}
         <li>
             {{ ticket.name }}
             {{ ticket.lastName }}
@@ -21,14 +21,14 @@
         <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="{{ stripe_publishable_key }}"
-                data-amount= "{{ order().totalPrice * 100 }} "
+                data-amount= "{{ order.totalPrice * 100 }} "
                 data-name="Stripe.com"
                 data-description="Billetterie du Louvre"
                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                 data-locale="auto"
                 data-zip-code="false"
                 data-currency="eur"
-                data-email="{{ order().email }}">
+                data-email="{{ order.email }}">
 
         </script>
     </form>

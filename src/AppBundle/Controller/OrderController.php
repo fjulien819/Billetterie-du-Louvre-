@@ -66,7 +66,7 @@ class OrderController extends Controller
             }
         }
 
-        return $this->render('default/order.html.twig', array('form' => $form->createView(),
+        return $this->render('default/order.html.twig', array('form' => $form->createView(), 'order' => $cart->getOrder()
         ));
 
     }
@@ -101,7 +101,7 @@ class OrderController extends Controller
 
         }
 
-        return $this->render("default/summary.html.twig");
+        return $this->render("default/summary.html.twig", array( 'order' => $cart->getOrder()));
     }
 
 

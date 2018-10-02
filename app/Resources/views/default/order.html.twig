@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    Billet n° {{order().tickets|length + 1 }} / {{order().nbrTickets}}
+    Billet n° {{order.tickets|length + 1 }} / {{order.nbrTickets}}
 
     {{ form_start(form,{attr:{autocomplete:"off"}}) }}
 
