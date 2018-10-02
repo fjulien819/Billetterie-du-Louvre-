@@ -17,7 +17,7 @@
             {{ ticket.price }}
         </li>
     {% endfor %}
-    <form action="{{ path('order_checkout') }}" method="POST">
+    <form action="{{ path('summaryPage') }}" method="POST">
         <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_fMHtDjtUDViWaYUNBDIprQMM"

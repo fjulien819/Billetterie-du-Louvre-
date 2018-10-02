@@ -79,50 +79,43 @@ class OrderController extends Controller
      * @param PriceCalculator $priceCalculator
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function summaryAction(Cart $cart, PriceCalculator $priceCalculator)
+    public function summaryAction(Request $request, Cart $cart, PriceCalculator $priceCalculator)
     {
 
         $order = $cart->getOrder();
         $priceCalculator->computeTotalPrice($order);
-        return $this->render('default/summary.html.twig', array("order" => $order));
 
-    }
-
-    /**
-     * @Route("/checkout", name="order_checkout")
-     * @param Request $request
-     * @param Cart $cart
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function checkoutAction(Request $request, Cart $cart)
-    {
-
-
-        Stripe::setApiKey("sk_test_PvRPdtQtuQZNAhoJeQvKg65o");
-        $token =  $request->get('stripeToken');
-        $email = $request->get('stripeEmail');
-        $totalPrice = $cart->getOrder()->getTotalPrice() * 100;
-
-        try
+        if ($request->isMethod('POST'))
         {
-            $charge = Charge::create([
-                'amount' => $totalPrice,
-                'currency' => 'EUR',
-                'description' => 'Billetterie du Louvre',
-                'source' => $token,
-            ]);
 
-            $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
-            return $this->redirectToRoute("homepage");
+            Stripe::setApiKey("sk_test_PvRPdtQtuQZNAhoJeQvKg65o");
+            $token =  $request->get('stripeToken');
+            $email = $request->get('stripeEmail');
+            $totalPrice = $cart->getOrder()->getTotalPrice() * 100;
+
+            try
+            {
+                $charge = Charge::create([
+                    'amount' => $totalPrice,
+                    'currency' => 'EUR',
+                    'description' => 'Billetterie du Louvre',
+                    'source' => $token,
+                ]);
+
+                $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
+                return $this->redirectToRoute("homepage");
+            }
+            catch(\Exception $e) {
+
+                $this->addFlash("checkout", "Le paiement a échoué");
+                return $this->redirectToRoute("summaryPage");
+
+            }
+
         }
-        catch(\Exception $e) {
 
-
-        }
-
-        $this->addFlash("checkout", "Le paiement a échoué");
-        return $this->redirectToRoute("summaryPage");
-
+        return $this->render("default/summary.html.twig");
     }
+
 
 }
