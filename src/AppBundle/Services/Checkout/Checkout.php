@@ -21,7 +21,7 @@ class Checkout
     {
         $this->apiKey = $apiKey;
     }
-    public function charge($token, $totalPrice, $description)
+    public function charge($email, $token, $totalPrice, $description)
     {
         Stripe::setApiKey($this->apiKey);
 
@@ -30,6 +30,7 @@ class Checkout
             'currency' => 'EUR',
             'description' => $description,
             'source' => $token,
+            'email' => $email,
         ]);
 
 

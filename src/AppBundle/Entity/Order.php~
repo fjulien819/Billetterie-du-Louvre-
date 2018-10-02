@@ -75,7 +75,6 @@ class Order
     private $tickets;
 
     /**
-     * @ORM\Column(name="email", type="string", length=255)
      * @var string
      * @Assert\Email
      */
@@ -227,14 +226,5 @@ class Order
     public function getTickets()
     {
         return $this->tickets;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-    public function setEmail($email)
-    {
-        $this->email = $email;
     }
 }

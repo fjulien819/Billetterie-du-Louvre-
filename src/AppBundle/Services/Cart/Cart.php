@@ -25,7 +25,7 @@ class Cart
     private $checkout;
 
 
-    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator,Checkout $checkout, $email)
+    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator, Checkout $checkout, $email)
     {
         $this->session = $session;
         $this->priceCalculator = $priceCalculator;
@@ -107,8 +107,9 @@ class Cart
     {
         try
         {
+            $email = $this->getOrder()->getEmail();
             $totalPrice = $this->getOrder()->getTotalPrice();
-            $this->checkout->charge($token, $totalPrice, $description);
+            $this->checkout->charge($email, $token, $totalPrice, $description);
             return true;
         }
         catch (\Exception $e)
