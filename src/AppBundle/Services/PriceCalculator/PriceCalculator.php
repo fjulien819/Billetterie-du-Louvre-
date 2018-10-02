@@ -25,18 +25,11 @@ class PriceCalculator
     const TARIF_SENIOR = "12";
     const TARIF_REDUIT = "10";
 
+    const AGE_ENFANT = 4;
+    const AGE_ADULTE = 12;
+    const AGE_SENIOR = 60;
 
-    /*
 
-    public function computeOrderPrice(Order $order)
-    {
-        foreach($order-W>getTickets() as $ticket){
-            $totalPrice += $this->getTicketPrice($ticket);
-        }
-
-    }
-
-    */
     public function getTicketPrice(Ticket $ticket)
     {
 
@@ -56,16 +49,16 @@ class PriceCalculator
             $diff = $visiteDay->diff($birthDate)->format("%y%");
 
             switch ($diff) {
-                case ($diff < 4):
+                case ($diff < self::AGE_ENFANT):
                     $price = 0;
                     break;
-                case ($diff >= 4) && ($diff < 12) :
+                case ($diff >= self::AGE_ENFANT) && ($diff < self::AGE_ADULTE):
                     $price = self::TARIF_ENFANT;
                     break;
-                case ($diff >= 12) && ($diff < 60):
+                case ($diff >= self::AGE_ADULTE) && ($diff < self::AGE_SENIOR):
                     $price = self::TARIF_NORMAL;
                     break;
-                case ($diff >= 60):
+                case ($diff >= self::AGE_SENIOR):
                     $price = self::TARIF_SENIOR;
                     break;
             }
