@@ -30,7 +30,7 @@ class Checkout
             'currency' => 'EUR',
             'description' => $description,
             'source' => $token,
-            'email' => $email,
+
         ]);
 
 
