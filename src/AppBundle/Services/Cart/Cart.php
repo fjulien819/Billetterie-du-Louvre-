@@ -9,6 +9,7 @@
 namespace AppBundle\Services\Cart;
 
 
+use AppBundle\Entity\Order;
 use AppBundle\Entity\Ticket;
 use AppBundle\Services\Checkout\Checkout;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Cart
 {
     const SESSION_ORDER_KEY = "order";
+    const ORDER_ID_LENGTH = "15";
+    const ORDER_ID_CHARS = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
     private $session;
@@ -66,6 +69,7 @@ class Cart
         }else{
             throw new NotFoundHttpException();
         }
+
     }
 
     public function deleteCart()
@@ -77,11 +81,23 @@ class Cart
 
     }
 
-    public function setOrder($order)
+    public function setOrder(Order $order)
     {
+        $order->setIdOrder($this->generateIdOrder());
         $this->session->set(self::SESSION_ORDER_KEY, $order);
     }
 
+    public function generateIdOrder()
+    {
+        $clen   = strlen( self::ORDER_ID_CHARS )-1;
+        $id  = '';
+
+        for ($i = 0; $i < self::ORDER_ID_LENGTH; $i++) {
+            $id .= self::ORDER_ID_CHARS[mt_rand(0,$clen)];
+        }
+
+        return $id;
+    }
     public function fullCart()
     {
         $nbrTickets = $this->getOrder()->getNbrTickets();
@@ -109,7 +125,8 @@ class Cart
         {
             $email = $this->getOrder()->getEmail();
             $totalPrice = $this->getOrder()->getTotalPrice();
-            $this->checkout->charge($email, $token, $totalPrice, $description);
+            $orderId = $this->getOrder()->getIdOrder();
+            $this->checkout->charge($orderId, $email, $token, $totalPrice, $description);
             return true;
         }
         catch (\Exception $e)
@@ -119,4 +136,5 @@ class Cart
         }
 
     }
+
 }

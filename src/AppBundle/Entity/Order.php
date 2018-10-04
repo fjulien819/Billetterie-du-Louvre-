@@ -36,7 +36,15 @@ class Order
      * @ORM\Column(name="nbrTickets", type="integer")
      *
      */
+
     private $nbrTickets;
+
+    /**
+     * @var string
+     * @ORM\Column(name="idOrder", type="string", length=255)
+     *
+     */
+    private $idOrder;
 
     /**
      * @var \DateTime
@@ -236,5 +244,29 @@ class Order
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * Set idOrder.
+     *
+     * @param string $idOrder
+     *
+     * @return Order
+     */
+    public function setIdOrder($idOrder)
+    {
+        $this->idOrder = $idOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get idOrder.
+     *
+     * @return string
+     */
+    public function getIdOrder()
+    {
+        return $this->idOrder;
     }
 }
