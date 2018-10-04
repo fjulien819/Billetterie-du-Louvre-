@@ -84,6 +84,11 @@ class OrderController extends Controller
 
             if ($payment === true)
             {
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($order);
+                $em->flush();
+
                 $email->sendTicket($order);
                 $cart->deleteCart();
                 return $this->render("default/confirmation.html.twig", array("order" => $order));
