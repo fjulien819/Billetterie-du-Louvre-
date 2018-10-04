@@ -1,0 +1,10 @@
+{% for ticket in order.tickets %}
+<li>
+    {{ ticket.name }}
+    {{ ticket.lastName }}
+    {{ ticket.country }}
+    {{ ticket.birthDate|date("d/m/Y") }}
+    {{ ticket.reducedPrice }}
+    {{ ticket.price }}
+</li>
+{% endfor %}

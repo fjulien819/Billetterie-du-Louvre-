@@ -6,6 +6,7 @@ use AppBundle\Form\InitOrderType;
 use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
+use AppBundle\Services\SendEmail\SendEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,8 +30,6 @@ class OrderController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $cart->setOrder($form->getData());
-
-
             return $this->redirectToRoute("orderPage");
 
         }
@@ -47,25 +46,19 @@ class OrderController extends Controller
      */
     public function orderAction(Request $request, Cart $cart)
     {
+        if ($cart->fullCart()) {
+            return $this->redirectToRoute("summaryPage");
+        }
         $form = $this->createForm(TicketType::class, $cart->generateTicket());
 
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-            // $cart->getOrder()
-            ////$cart->addTicket($form->getData());
-            ///
 
             $cart->addTicket($form->getData());
 
-            if ($cart->fullCart()) {
-                return $this->redirectToRoute("summaryPage");
-            }else{
-                return $this->redirectToRoute('orderPage');
-            }
+            return $this->redirectToRoute('orderPage');
         }
-
         return $this->render('default/order.html.twig', array('form' => $form->createView(), 'order' => $cart->getOrder()
         ));
 
@@ -77,7 +70,7 @@ class OrderController extends Controller
      * @param PriceCalculator $priceCalculator
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function summaryAction(Request $request, Cart $cart, PriceCalculator $priceCalculator)
+    public function summaryAction(Request $request, Cart $cart, PriceCalculator $priceCalculator, SendEmail $email)
     {
 
         $order = $cart->getOrder();
@@ -92,6 +85,7 @@ class OrderController extends Controller
             if ($payment === true)
             {
                 $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
+                $email->sendTicket($order);
                 return $this->redirectToRoute("homepage");
             }
 
