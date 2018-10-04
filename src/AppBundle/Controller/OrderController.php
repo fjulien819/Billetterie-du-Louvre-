@@ -84,9 +84,9 @@ class OrderController extends Controller
 
             if ($payment === true)
             {
-                $this->addFlash("checkout", "Commande validée, vous allez recevoir les billets par mail.");
                 $email->sendTicket($order);
-                return $this->redirectToRoute("homepage");
+                $cart->deleteCart();
+                return $this->render("default/confirmation.html.twig", array("order" => $order));
             }
 
             $this->addFlash("checkout", "Le paiement a échoué");
