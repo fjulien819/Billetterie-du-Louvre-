@@ -9,10 +9,24 @@
         <link rel="stylesheet" href="{{ asset('css/main.css') }}" />
     </head>
     <body>
-    <div class="container">
-        {% block body %}
-        {% endblock %}
-    </div>
+    <div id="overlay"></div>
+    <header>
+        <div id="logo">
+            <img class="mx-auto" src="{{ asset('css/noun_Louvre_281404.svg') }}">
+            <H1 class="text-white text-center">Billetterie du Louvre</H1>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </main>
+    <footer>
+        <div id="credit">
+            Photo by Uriel Soberanes on <a href="https://unsplash.com/photos/LrMWHKqilUw">Unsplash </a> - logo by Jake Dunham from <a href="https://thenounproject.com/search/?q=louvre&i=281404">the Noun Project</a>
+        </div>
+    </footer>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
