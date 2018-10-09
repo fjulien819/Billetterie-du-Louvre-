@@ -30,7 +30,7 @@ class PriceCalculator
     const AGE_SENIOR = 60;
 
 
-    public function getTicketPrice(Ticket $ticket)
+    public function computeTicketPrice(Ticket $ticket)
     {
 
         $order = $ticket->getOrderTickets();
@@ -66,7 +66,7 @@ class PriceCalculator
 
         }
 
-        return $price;
+        $ticket->setPrice($price);
 
     }
 

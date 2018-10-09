@@ -13,6 +13,9 @@ use AppBundle\Entity\Order;
 use AppBundle\Entity\Ticket;
 use AppBundle\Services\Checkout\Checkout;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
+use AppBundle\Services\SendEmail\SendEmail;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,27 +29,26 @@ class Cart
     private $session;
     private $priceCalculator;
     private $checkout;
+    private $em;
+    private $sendEmail;
 
 
-    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator, Checkout $checkout, $email)
+    public function __construct(SessionInterface $session, PriceCalculator $priceCalculator, Checkout $checkout, EntityManagerInterface $em, SendEmail $sendEmail)
     {
         $this->session = $session;
         $this->priceCalculator = $priceCalculator;
         $this->checkout = $checkout;
+        $this->em = $em;
+        $this->sendEmail = $sendEmail;
     }
 
     public function addTicket(Ticket $ticket)
     {
 
-        if (!$this->fullCart())
-        {
-            $ticket->setPrice($this->priceCalculator->getTicketPrice($ticket));
+        if (!$this->fullCart()) {
+            $this->priceCalculator->computeTicketPrice($ticket);
             $this->getOrder()->addTicket($ticket);
-
-        }
-        else
-        {
-            dump("max de tickets");
+            $this->priceCalculator->computeTotalPrice($this->getOrder());
         }
 
     }
@@ -63,10 +65,9 @@ class Cart
     public function getOrder()
     {
 
-        if ($this->session->has(self::SESSION_ORDER_KEY))
-        {
+        if ($this->session->has(self::SESSION_ORDER_KEY)) {
             return $this->session->get(self::SESSION_ORDER_KEY);
-        }else{
+        } else {
             throw new NotFoundHttpException();
         }
 
@@ -74,8 +75,7 @@ class Cart
 
     public function deleteCart()
     {
-        if ($this->session->has(self::SESSION_ORDER_KEY))
-        {
+        if ($this->session->has(self::SESSION_ORDER_KEY)) {
             $this->session->remove(self::SESSION_ORDER_KEY);
         }
 
@@ -83,26 +83,25 @@ class Cart
 
     public function setOrder(Order $order)
     {
-        $order->setIdOrder($this->generateIdOrder());
         $this->session->set(self::SESSION_ORDER_KEY, $order);
     }
 
     public function generateIdOrder()
     {
-        $clen   = strlen( self::ORDER_ID_CHARS )-1;
-        $id  = '';
+        $clen = strlen(self::ORDER_ID_CHARS) - 1;
+        $id = '';
 
         for ($i = 0; $i < self::ORDER_ID_LENGTH; $i++) {
-            $id .= self::ORDER_ID_CHARS[mt_rand(0,$clen)];
+            $id .= self::ORDER_ID_CHARS[mt_rand(0, $clen)];
         }
 
         return $id;
     }
+
     public function fullCart()
     {
         $nbrTickets = $this->getOrder()->getNbrTickets();
-        if (count($this->getOrder()->getTickets()) < $nbrTickets)
-        {
+        if (count($this->getOrder()->getTickets()) < $nbrTickets) {
             return false;
         }
         return true;
@@ -119,22 +118,33 @@ class Cart
         return $ticket->setOrderTickets($this->getOrder());
 
     }
-    public function payment($token, $description)
+
+    /**
+     * @param $token
+     * @param $description
+     * @return bool
+     */
+    public function payment()
     {
-        try
+        $order = $this->getOrder();
+        $totalPrice = $order->getTotalPrice();
+        $orderId = $order->getIdOrder();
+
+        if($this->checkout->charge($orderId, $totalPrice, "Billetterie du Louvre"))
         {
-            $email = $this->getOrder()->getEmail();
-            $totalPrice = $this->getOrder()->getTotalPrice();
-            $orderId = $this->getOrder()->getIdOrder();
-            $this->checkout->charge($orderId, $email, $token, $totalPrice, $description);
+            $order->setIdOrder($this->generateIdOrder());
+
+            $this->em->persist($order);
+            $this->em->flush();
+
+            $this->sendEmail->sendTicket($order);
+            $this->deleteCart();
+
             return true;
         }
-        catch (\Exception $e)
-        {
-            $err  = $e->getMessage();
-            return $err;
-        }
 
+
+        return false;
     }
 
 }

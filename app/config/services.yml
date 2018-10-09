@@ -36,10 +36,7 @@ services:
     #         $someArgument: 'some_value'
 
 
-    AppBundle\Services\Cart\Cart:
 
-        arguments:
-            $email:  "toto@toto.com"
 
     AppBundle\Services\Checkout\Checkout:
 
