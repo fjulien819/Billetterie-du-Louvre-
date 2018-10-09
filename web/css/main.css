@@ -4,6 +4,7 @@ body
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    min-height: 100vh;
 
 }
 #overlay
@@ -33,11 +34,14 @@ header, main, footer
 }
 #credit
 {
-    color: #F4F4F4;
-    display: flex;
-    justify-content: center;
-    padding: 3px;
+    align-items: center;
 }
 .h2, h2 {
 
     font-size: 1rem;
+}
+
+a:hover, a:focus {
+
+    text-decoration: none;
+}
