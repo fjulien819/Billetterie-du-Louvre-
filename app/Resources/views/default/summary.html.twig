@@ -1,35 +1,68 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    {% for flashMessage in app.session.flashbag.get('checkout') %}
 
-        {{ flashMessage }}
+    <div class="card border-0 p-0 col-12"  >
 
-    {% endfor %}
+        <div class="card-header bg-dark text-white ">
+            <h2 class="text-uppercase">Récapitulatif de la commande</h2>
+        </div>
 
-    {% for ticket in order.tickets %}
-        <li>
-            {{ ticket.name }}
-            {{ ticket.lastName }}
-            {{ ticket.country }}
-            {{ ticket.birthDate|date("d/m/Y") }}
-            {{ ticket.reducedPrice }}
-            {{ ticket.price }}
-        </li>
-    {% endfor %}
-    <form action="{{ path('summaryPage') }}" method="POST">
-        <script
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="{{ stripe_publishable_key }}"
-                data-amount= "{{ order.totalPrice * 100 }} "
-                data-name="Stripe.com"
-                data-description="Billetterie du Louvre"
-                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                data-locale="auto"
-                data-zip-code="false"
-                data-currency="eur"
-                data-email="{{ order.email }}">
+        <div class="card-body">
 
-        </script>
-    </form>
+            {% for flashMessage in app.session.flashbag.get('checkout') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <div class="card">
+                <div class="card-header text-light bg-dark">
+                    <div class="d-flex flex-column">
+                        <small>Email: {{ order.email }}</small>
+                        <small>Date de la visite: {{ order.visiteDay|date("d/m/Y") }}</small>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 ">
+                    <ul class="list-group ">
+                        {% for ticket in order.tickets %}
+                            <li class="text-uppercase rounded-0 list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    {{ ticket.name }} {{ ticket.lastName }}<br>
+                                    <span class="text-muted">{{ ticket.birthDate|date("d/m/Y") }}</span>
+                                </div>
+                                <span class="badge badge-white badge-pill">{{ ticket.price}} €</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card-footer text-uppercase d-flex justify-content-between">
+                    <strong>Total commande:</strong>
+                    <strong>{{ order.totalPrice }} €</strong>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="card-footer d-flex  justify-content-end">
+
+            <form action="{{ path('summaryPage') }}" method="POST">
+                <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="{{ stripe_publishable_key }}"
+                        data-amount= "{{ order.totalPrice * 100 }} "
+                        data-name="Stripe.com"
+                        data-description="Billetterie du Louvre"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto"
+                        data-zip-code="false"
+                        data-currency="eur"
+                        data-email="{{ order.email }}">
+
+                </script>
+            </form>
+        </div>
+    </div>
 {% endblock %}
