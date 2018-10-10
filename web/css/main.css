@@ -32,10 +32,7 @@ header, main, footer
     padding: 20px;
 
 }
-#credit
-{
-    align-items: center;
-}
+
 .h2, h2 {
 
     font-size: 1rem;
@@ -44,4 +41,9 @@ header, main, footer
 a:hover, a:focus {
 
     text-decoration: none;
+    color: #FFFFFF;
+
+}
+a{
+    color: #969ea5;
 }
