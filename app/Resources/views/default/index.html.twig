@@ -14,6 +14,15 @@
         </div>
         <div class="card-body">
 
+            <div class="alert alert-secondary d-flex align-items-baseline" role="alert">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                <p>
+                    Le musée est ouvert tous les jours sauf le mardi, le 01/05, le 01/11 et le 25/12.<br>
+                    Il n’est pas possible de réserver pour les dimanches et les jours fériés.
+                </p>
+
+            </div>
+
             {{ form_start(form) }}
 
             <div class="form-group">
@@ -25,14 +34,12 @@
             <div class="form-group">
                 {{ form_label(form.nbrTickets) }}
                 {{ form_widget(form.nbrTickets) }}
-                <small id="emailHelp" class="form-text text-muted">Pour une commande de plus de 10 billets, repassez une nouvelle commande ou contactez le musée.</small>
+                <small id="emailHelp" class="form-text text-muted">Pour une commande de plus de 10 billets, effectuez une nouvelle commande ou contactez le musée.</small>
             </div>
 
             <div class="form-group">
                 {{ form_label(form.visiteDay) }}
                 {{ form_widget(form.visiteDay) }}
-                <small id="emailHelp" class="form-text text-muted">Le musée est ouvert tous les jours sauf le mardi, le 01/05, le 01/11 et le 25/12.<br>
-                    Il n’est pas possible de réserver pour les dimanches et les jours fériés.</small>
             </div>
 
             <div class="form-group">
