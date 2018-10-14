@@ -30,7 +30,7 @@ class InitOrderType extends AbstractType
 
             ->add('nbrTickets', IntegerType::class, array(
                 'required' => true,
-                'attr' => array('min' => Order::MIN_TICKETS_COUNT),
+                'attr' => array('min' => Order::MIN_TICKETS_COUNT, "max" => Order::MAX_TICKETS_COUNT),
                 'label' => 'Nombre de billets souhaités'
             ))
             ->add('visiteDay', DateType::class, array(

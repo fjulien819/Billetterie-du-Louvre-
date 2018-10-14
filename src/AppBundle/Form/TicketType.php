@@ -27,12 +27,26 @@ class TicketType extends AbstractType
             ))
 
 
-            ->add('name', TextType::class)
-            ->add('lastName', TextType::class)
-            ->add('country', CountryType::class)
-            ->add('birthDate', BirthdayType::class )
+            ->add('name', TextType::class, array(
+                'label' => 'Prénom'
+            ))
+            ->add('lastName', TextType::class, array(
+                'label' => 'Nom'
+            ))
+            ->add('country', CountryType::class, array(
+                'label' => 'Pays',
+                'placeholder' => 'Choisisez un pays'
+            ))
+            ->add('birthDate', BirthdayType::class, array(
+                'label' => 'Date de naissance',
+                'placeholder' => array(
+                    'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
+                )
+            ) )
             ->add('reducedPrice', CheckboxType::class, array(
-                'required' => false))
+                'required' => false,
+                'label' => 'Tarif réduit'
+            ))
 
 
 
