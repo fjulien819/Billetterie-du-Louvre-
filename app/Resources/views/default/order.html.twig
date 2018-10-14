@@ -27,8 +27,14 @@
                     Billet n° {{order.tickets|length + 1 }} / {{order.nbrTickets}}
                 </div>
                 <div class="card-body bg-light">
+
                     {{ form_rest(form) }}
+
+                    <small id="emailHelp" class="form-text text-muted">Pour le tarif payé, un justificatif peut être demandé à l'entré du musée.</small><br>
                     <button type="submit" class="text-uppercase btn btn-dark float-right">Ajouter billet</button>
+
+
+
                 </div>
             </div>
             {{ form_end(form) }}

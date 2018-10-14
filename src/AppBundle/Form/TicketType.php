@@ -32,8 +32,7 @@ class TicketType extends AbstractType
             ->add('country', CountryType::class)
             ->add('birthDate', BirthdayType::class )
             ->add('reducedPrice', CheckboxType::class, array(
-                'required' => false
-            ) )
+                'required' => false))
 
 
 
