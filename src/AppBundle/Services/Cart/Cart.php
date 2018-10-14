@@ -11,6 +11,7 @@ namespace AppBundle\Services\Cart;
 
 use AppBundle\Entity\Order;
 use AppBundle\Entity\Ticket;
+use AppBundle\Exception\OrderNotFoundException;
 use AppBundle\Services\Checkout\Checkout;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
 use AppBundle\Services\SendEmail\SendEmail;
@@ -60,7 +61,7 @@ class Cart
      * Return order from session
      *
      * @return mixed
-     * @throws NotFoundHttpException
+     * @throws OrderNotFoundException
      */
     public function getOrder()
     {
@@ -68,7 +69,7 @@ class Cart
         if ($this->session->has(self::SESSION_ORDER_KEY)) {
             return $this->session->get(self::SESSION_ORDER_KEY);
         } else {
-            throw new NotFoundHttpException();
+            throw new OrderNotFoundException();
         }
 
     }

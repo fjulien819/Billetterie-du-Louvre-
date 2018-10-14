@@ -43,6 +43,9 @@ services:
         arguments:
             ['%stripe_secret_key%']
 
+    AppBundle\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
 
 
 
