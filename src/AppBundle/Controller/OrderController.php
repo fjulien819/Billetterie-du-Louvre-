@@ -70,20 +70,27 @@ class OrderController extends Controller
     public function summaryAction(Request $request, Cart $cart)
     {
 
-        $order = $cart->getOrder();
 
-        if ($request->isMethod('POST'))
+        if($cart->fullCart())
         {
-            if ($cart->payment())
+
+            $order = $cart->getOrder();
+
+            if ($request->isMethod('POST'))
             {
-                return $this->render("default/confirmation.html.twig", array("order" => $order));
+                if ($cart->payment())
+                {
+                    return $this->render("default/confirmation.html.twig", array("order" => $order));
+                }
+
+                $this->addFlash("checkout", "Le paiement a échoué");
+
             }
 
-            $this->addFlash("checkout", "Le paiement a échoué");
-
+            return $this->render("default/summary.html.twig", array( 'order' => $cart->getOrder()));
         }
 
-        return $this->render("default/summary.html.twig", array( 'order' => $cart->getOrder()));
+        return $this->redirectToRoute('orderPage');
     }
 
 
