@@ -19,6 +19,7 @@ class Order
     const TYPE_FULL_DAY = "journee";
     const TYPE_HALF_DAY = "demiJournee";
     const MIN_TICKETS_COUNT = 1;
+    const MAX_TICKETS_COUNT = 10;
     const TICKET_lIMIT_PER_DAY = 1000;
 
 
@@ -34,6 +35,13 @@ class Order
     /**
      * @var int
      * @ORM\Column(name="nbrTickets", type="integer")
+     * @Assert\Type(type="integer", message="La valeur {{ value }} n'est pas un nombre entier.")
+     * @Assert\Range(
+     *      min = Order::MIN_TICKETS_COUNT,
+     *      max = Order::MAX_TICKETS_COUNT,
+     *      minMessage = "Minimum de billets non atteint",
+     *      maxMessage = "Maximum de billets dépassé"
+     * )
      *
      */
 
@@ -50,8 +58,8 @@ class Order
      * @var \DateTime
      *
      * @ORM\Column(name="visiteDay", type="datetime")
-     * @Assert\Date()
-     * @Assert\GreaterThanOrEqual("today")
+     * @Assert\Date(message="{{ value }} n'est pas une date valide.")
+     * @Assert\GreaterThanOrEqual("today", message="Vous ne pouvez pas réserver pour une date inférieur à celle d'aujourd'hui.")
      * @LouvreAssert\IsSunday()
      * @LouvreAssert\IsTuesday()
      * @LouvreAssert\IsHoliday()

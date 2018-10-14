@@ -25,7 +25,8 @@ class Ticket
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="alpha", message="Ce champ doit uniquement contenir des lettres.")
+     *
      *
      * @ORM\Column(name="name", type="string", length=255)
      *
@@ -36,7 +37,7 @@ class Ticket
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="alpha", message="Ce champ doit uniquement contenir des lettres.")
      *
      * @ORM\Column(name="lastName", type="string", length=255)
      */
@@ -45,7 +46,7 @@ class Ticket
     /**
      * @var string
      *
-     * @Assert\Country()
+     * @Assert\Country(message="{{ value }} n'est pas un pays valide.")
      *
      * @ORM\Column(name="country", type="string", length=255)
      */
@@ -54,12 +55,11 @@ class Ticket
     /**
      * @var \DateTime
      *
-     * @Assert\Date()
+     * @Assert\Date(message="{{ value }} n'est pas une date valide")
      *
      * @ORM\Column(name="birthDate", type="datetime")
      */
     private $birthDate;
-
     /**
      * @var bool
      *
