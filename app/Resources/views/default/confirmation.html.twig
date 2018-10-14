@@ -1,3 +1,16 @@
-<H1>Commande comfirmé</H1>
-<H2>Vous aller recevoir vos billet par mail</H2>
-<p>Identifiant de commande: {{ order.idOrder }}</p>
+{% extends "layout.html.twig" %}
+{% block body %}
+
+    <div class="card col-12 p-0">
+        <div class="card-body text-center">
+            <h1><i class="fas fa-check-circle"></i></h1>
+            <h3>Commande confirmée!</h3>
+            <h5><small class="text-muted">Vous allez recevoir vos billets par mail</small></h5>
+            <small class="text-muted">Identifiant de commande: {{ order.idOrder }}</small>
+        </div>
+        <div class="card-footer text-muted d-flex justify-content-center bg-transparent">
+            <a class="btn btn-dark" href="{{ path('homepage') }}" role="button">Retour à la page d'accueil</a>
+        </div>
+    </div>
+
+{% endblock %}
