@@ -14,6 +14,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class IsSundayValidator extends ConstraintValidator
 {
+    /**
+     * @param $value
+     * @param Constraint $constraint
+     */
     public function validate($value, Constraint $constraint)
     {
         if ($value->format('D') === "Sun") {

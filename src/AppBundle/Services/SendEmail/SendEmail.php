@@ -28,6 +28,7 @@ class SendEmail
     }
     public function sendTicket(Order $order)
     {
+
         $message = (new \Swift_Message(self::SUBJECT_EMAIL))
             ->setFrom(self::FROM_EMAIL)
             ->setTo($order->getEmail())

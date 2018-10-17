@@ -15,10 +15,8 @@ use AppBundle\Exception\OrderNotFoundException;
 use AppBundle\Services\Checkout\Checkout;
 use AppBundle\Services\PriceCalculator\PriceCalculator;
 use AppBundle\Services\SendEmail\SendEmail;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Cart
 {
@@ -43,6 +41,10 @@ class Cart
         $this->sendEmail = $sendEmail;
     }
 
+    /**
+     * @param Ticket $ticket
+     * @throws OrderNotFoundException
+     */
     public function addTicket(Ticket $ticket)
     {
 
@@ -99,6 +101,10 @@ class Cart
         return $id;
     }
 
+    /**
+     * @return bool
+     * @throws OrderNotFoundException
+     */
     public function fullCart()
     {
         $nbrTickets = $this->getOrder()->getNbrTickets();
@@ -112,6 +118,7 @@ class Cart
      * Genere un nouveau ticket associé à la commande n cours
      *
      * @return Ticket
+     * @throws OrderNotFoundException
      */
     public function generateTicket()
     {
@@ -121,9 +128,8 @@ class Cart
     }
 
     /**
-     * @param $token
-     * @param $description
      * @return bool
+     * @throws OrderNotFoundException
      */
     public function payment()
     {

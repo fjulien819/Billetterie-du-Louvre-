@@ -6,45 +6,33 @@
         <div class="card-header bg-dark text-white ">
             <h2 class="text-uppercase">Création des billets</h2>
         </div>
-
         <div class="card-body">
-            {{ form_start(form) }}
-            <p>
-                <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Récapitulatif commande
-                    <i class="fas fa-angle-down"></i>
-                </button>
-            </p>
-
-            <div class="collapse" id="collapseExample">
-                <div class="card card-body">
-                    {{ form_widget(form.orderTickets) }}
-                </div>
-            </div>
-
             <div class="card mt-2">
                 <div class="card-header">
                     Billet n° {{order.tickets|length + 1 }} / {{order.nbrTickets}}
                 </div>
                 <div class="card-body bg-light">
-
-                    {{ form_rest(form) }}
-
+                    {{ form_start(form) }}
+                        {{ form_rest(form) }}
                     <small id="emailHelp" class="form-text text-muted">Pour le tarif payé, un justificatif peut être demandé à l'entré du musée.</small><br>
                     <button type="submit" class="text-uppercase btn btn-dark float-right">Ajouter billet</button>
-
-
-
+                    {{ form_end(form) }}
                 </div>
             </div>
-            {{ form_end(form) }}
         </div>
 
     </div>
-
     <div class="card border-0 p-0 col-12 col-md-3 ml-md-1 mb-2 mb-md-0 order-md-last order-first" >
         <div class="card-header bg-dark text-white ">
             <h2 class="text-uppercase">Panier</h2>
+            <div class="d-flex justify-content-between mt-3 text-uppercase">
+                <small>Jour de la visite:</small>
+                <small>{{ order.visiteDay|date("d/m/Y") }}</small>
+            </div>
+            <div class="d-flex justify-content-between">
+                <small class="text-uppercase">Email:</small>
+                <small>{{ order.email }}</small>
+            </div>
         </div>
         <div class="card-body p-0">
             <ul class="list-group">
@@ -55,7 +43,6 @@
                             {{ ticket.name }} {{ ticket.lastName }}<br>
                             <span class="text-muted">{{ ticket.birthDate|date("d/m/Y") }}</span>
                         </div>
-
                         <span class="badge badge-white badge-pill">{{ ticket.price}} €</span>
                     </li>
                 {% endfor %}
@@ -64,9 +51,7 @@
         </div>
         <div class="card-footer p-0" style="height: 100%;">
             {% if order.tickets|length == 0 %}
-
                 <p class="justify-content-center d-flex mt-5 text-muted">Le panier est vide</p>
-
             {% else %}
                 <li class="text-uppercase bg-transparent list-group-item d-flex justify-content-between align-items-center">
                     <strong>Total de la commande: </strong>

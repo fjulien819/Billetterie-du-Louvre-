@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Form\InitOrderType;
 use AppBundle\Form\TicketType;
 use AppBundle\Services\Cart\Cart;
-use AppBundle\Services\PriceCalculator\PriceCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,6 +14,9 @@ class OrderController extends Controller
 
     /**
      * @Route("/", name="homepage")
+     * @param Request $request
+     * @param Cart $cart
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
 
     public function indexAction(Request $request, Cart $cart)
@@ -38,6 +40,7 @@ class OrderController extends Controller
      * @param Request $request
      * @param Cart $cart
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \AppBundle\Exception\OrderNotFoundException
      */
     public function orderAction(Request $request, Cart $cart)
     {
@@ -63,9 +66,10 @@ class OrderController extends Controller
 
     /**
      * @Route("/summary", name="summaryPage")
+     * @param Request $request
      * @param Cart $cart
-     * @param PriceCalculator $priceCalculator
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \AppBundle\Exception\OrderNotFoundException
      */
     public function summaryAction(Request $request, Cart $cart)
     {

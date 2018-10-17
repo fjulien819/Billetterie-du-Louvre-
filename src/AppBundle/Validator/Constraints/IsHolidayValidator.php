@@ -15,6 +15,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 class IsHolidayValidator extends ConstraintValidator
 {
 
+    /**
+     * @param $value
+     * @param Constraint $constraint
+     */
     public function validate($value, Constraint $constraint)
     {
         // Jour fériés

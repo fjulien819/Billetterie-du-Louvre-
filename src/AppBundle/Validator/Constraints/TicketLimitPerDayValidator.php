@@ -25,34 +25,45 @@ class TicketLimitPerDayValidator extends ConstraintValidator
     {
         $this->em = $em;
     }
+
+    /**
+     * @param $value
+     * @param Constraint $constraint
+     */
     public function validate($value, Constraint $constraint)
     {
-        /** @var TicketRepository $repo */
-        $repo = $this->em->getRepository(Ticket::class);
-        $nbrTicket =  count($repo->getNbrTickets($value->getVisiteDay()));
-
-        //si limit 0 ticketforSale = negatif
-        if ($constraint->limit === 0)
-        {
-            $ticketForSale = 0;
-        }
-        else
-        {
-            $ticketForSale = $constraint->limit - $nbrTicket ;
-        }
-
-
-        $nbrTicket += $value->getNbrTickets();
-
-        if ($nbrTicket > $constraint->limit)
+        if($value->getVisiteDay() instanceof \DateTime)
         {
 
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ ticketForSale }}', $ticketForSale)
-                ->atPath('nbrTickets')
-                ->addViolation();
-        }
+            /** @var TicketRepository $repo */
+            $repo = $this->em->getRepository(Ticket::class);
+            $nbrTicket =  count($repo->getNbrTickets($value->getVisiteDay()));
 
+            //si limit 0 ticketforSale = negatif
+            if ($constraint->limit === 0)
+            {
+                $ticketForSale = 0;
+            }
+            else
+            {
+                $ticketForSale = $constraint->limit - $nbrTicket ;
+            }
+
+
+            $nbrTicket += $value->getNbrTickets();
+
+            if ($nbrTicket > $constraint->limit)
+            {
+
+                $this->context->buildViolation($constraint->message)
+                    ->setParameter('{{ ticketForSale }}', $ticketForSale)
+                    ->atPath('nbrTickets')
+                    ->addViolation();
+            }
+
+
+
+        }
 
 
     }

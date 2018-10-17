@@ -30,6 +30,9 @@ class PriceCalculator
     const AGE_SENIOR = 60;
 
 
+    /**
+     * @param Ticket $ticket
+     */
     public function computeTicketPrice(Ticket $ticket)
     {
 

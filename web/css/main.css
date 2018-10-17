@@ -47,3 +47,13 @@ a:hover, a:focus {
 a{
     color: #969ea5;
 }
+
+.form-control:focus {
+
+    color: #495057;
+    background-color: #fff;
+    border-color: #0006;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(189, 189, 189, 0.8);
+
+}

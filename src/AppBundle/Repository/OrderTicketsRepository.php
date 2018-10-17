@@ -1,7 +1,6 @@
 <?php
 
 namespace AppBundle\Repository;
-use ClassesWithParents\D;
 
 /**
  * OrderTicketsRepository

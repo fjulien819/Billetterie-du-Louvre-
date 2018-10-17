@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,8 +25,12 @@ class InitOrderType extends AbstractType
     {
         $builder
 
-            ->add('email', EmailType::class, array(
-                'required' => true
+            ->add('email', RepeatedType::class, array(
+                'type' => EmailType::class,
+                'required' => true,
+                'first_options'  => array('label' => 'Email'),
+                'second_options' => array('label' => 'Recopiez l\'email'),
+                'invalid_message' => 'Les adresses email ne correspondent pas.',
             ))
 
             ->add('nbrTickets', IntegerType::class, array(
@@ -47,6 +52,7 @@ class InitOrderType extends AbstractType
                 ),
                 'label' => 'Type de billet',
             ))
+
 
 
         ;

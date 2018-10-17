@@ -34,27 +34,38 @@ class CheckTicketTypeValidator extends ConstraintValidator
 
     }
 
+    /**
+     * @param $object
+     * @param Constraint $constraint
+     */
     public function validate($object, Constraint $constraint)
     {
 
-        if ($this->currentDate->format('Y-m-d') === $object->getVisiteDay()->format('Y-m-d'))
+        if($object instanceof \DateTime)
         {
 
-            if ($this->currentDate->format('H:i:s') > $this->limitTime->format('H:i:s'))
+            if ($this->currentDate->format('Y-m-d') === $object->getVisiteDay()->format('Y-m-d'))
             {
-                if ($object->getTicketType() === Order::TYPE_FULL_DAY)
-                {
 
-                   $this->context->buildViolation($constraint->message)
-                       ->setParameter('{{ string }}', self::H_LIMIT ."h")
-                        ->atPath('ticketType')
-                        ->addViolation();
+                if ($this->currentDate->format('H:i:s') > $this->limitTime->format('H:i:s'))
+                {
+                    if ($object->getTicketType() === Order::TYPE_FULL_DAY)
+                    {
+
+                        $this->context->buildViolation($constraint->message)
+                            ->setParameter('{{ string }}', self::H_LIMIT ."h")
+                            ->atPath('ticketType')
+                            ->addViolation();
+
+                    }
 
                 }
 
             }
 
         }
+
+
 
 
 

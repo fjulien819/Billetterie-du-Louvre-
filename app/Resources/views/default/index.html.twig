@@ -26,10 +26,16 @@
             {{ form_start(form) }}
 
             <div class="form-group">
-                {{ form_label(form.email) }}
-                {{ form_widget(form.email) }}
+                {{ form_label(form.email.first) }}
+                {{ form_widget(form.email.first) }}
                 <small id="emailHelp" class="form-text text-muted">Les billets seront envoyés à cette adresse.</small>
             </div>
+
+            <div class="form-group">
+                {{ form_label(form.email.second) }}
+                {{ form_widget(form.email.second) }}
+            </div>
+
 
             <div class="form-group">
                 {{ form_label(form.nbrTickets) }}

@@ -38,4 +38,10 @@ monolog:
         #    level: info
 
 swiftmailer:
-    delivery_addresses: ['billetterie@julienf-oc.fr']
+    spool:     { type: memory }
+    transport: '%transport%'
+    host:      '%host%'
+    username:  '%username%'
+    password:  '%password%'
+    auth_mode: '%auth_mode%'
+    port: '%port%'

@@ -5,7 +5,7 @@
         <div class="card-body text-center">
             <h1><i class="fas fa-check-circle"></i></h1>
             <h3>Commande confirmée!</h3>
-            <h5><small class="text-muted">Vous allez recevoir vos billets par mail</small></h5>
+            <h5><small class="text-muted">Vous allez recevoir vos billets à l'adresse: {{ order.email }}</small></h5>
             <small class="text-muted">Identifiant de commande: {{ order.idOrder }}</small>
         </div>
         <div class="card-footer text-muted d-flex justify-content-center bg-transparent">

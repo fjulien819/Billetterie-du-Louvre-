@@ -22,10 +22,12 @@ class TicketType extends AbstractType
 
 
             ->add('orderTickets', InitOrderType::class, array(
-                "disabled" => true
+                "disabled" => true,
+                "label_attr" => array("class" => "d-none"),
+                "attr" => array("class" => "d-none"),
+
 
             ))
-
 
             ->add('name', TextType::class, array(
                 'label' => 'Prénom'

@@ -71,7 +71,7 @@ class Order
     /**
      * @var string
      * @ORM\Column(name="ticketType", type="string", length=255)
-     * @Assert\Choice({"journee", "demiJournee"})
+     * @Assert\Choice(choices={"journee", "demiJournee"})
      *
      *
      */
@@ -87,6 +87,7 @@ class Order
     /**
      *
      *@ORM\OneToMany(targetEntity="Ticket", mappedBy="orderTickets",  cascade={"persist"})
+     *
      */
     private $tickets;
 
@@ -209,6 +210,7 @@ class Order
     public function __construct()
     {
         $this->tickets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->visiteDay = new \DateTime();
     }
 
     /**
