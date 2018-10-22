@@ -12,10 +12,13 @@
     <body>
     <div id="overlay"></div>
     <header>
-        <div id="logo">
-            <img class="mx-auto" src="{{ asset('img/noun_Louvre_281404.svg') }}">
-            <h1 class="text-white text-center display-4">Billetterie du Louvre</h1>
-        </div>
+        <a id="headerLink" href="{{ path('homepage') }}">
+            <div id="logo">
+                    <img class="mx-auto" src="{{ asset('img/noun_Louvre_281404.svg') }}">
+                    <h1 class="text-white text-center display-4">Billetterie du Louvre</h1>
+            </div>
+        </a>
+
     </header>
     <main>
         <div class="container mt-5">
