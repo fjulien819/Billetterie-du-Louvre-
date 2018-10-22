@@ -31,8 +31,12 @@
                                 <div>
                                     {{ ticket.name }} {{ ticket.lastName }}<br>
                                     <span class="text-muted">{{ ticket.birthDate|date("d/m/Y") }}</span>
+                                    {% if ticket.reducedPrice %}
+                                        <br><span class="badge badge-dark mb-1">Tarif réduit</span>
+                                    {% endif %}
                                 </div>
                                 <span class="badge badge-white badge-pill">{{ ticket.price}} €</span>
+
                             </li>
                         {% endfor %}
                     </ul>
@@ -46,11 +50,11 @@
 
             </div>
         </div>
-        <div class="card-footer d-flex  justify-content-end">
-
+        <div class="card-footer d-flex  justify-content-between">
+            <a class="btn btn-dark btn-sm" href="{{ path('homepage') }}" role="button">ACCUEIL</a>
             <form action="{{ path('summaryPage') }}" method="POST">
                 <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
-                <input class="btn btn-dark"
+                <input class="btn btn-dark btn-sm"
                     type="submit"
                     value="PAYER COMMANDE"
                     data-key="{{ stripe_publishable_key }}"
