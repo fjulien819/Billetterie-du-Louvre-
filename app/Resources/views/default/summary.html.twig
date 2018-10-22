@@ -49,18 +49,37 @@
         <div class="card-footer d-flex  justify-content-end">
 
             <form action="{{ path('summaryPage') }}" method="POST">
-                <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="{{ stripe_publishable_key }}"
-                        data-amount= "{{ order.totalPrice * 100 }} "
-                        data-name="Stripe.com"
-                        data-description="Billetterie du Louvre"
-                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                        data-locale="auto"
-                        data-zip-code="false"
-                        data-currency="eur"
-                        data-email="{{ order.email }}">
+                <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
+                <input class="btn btn-dark"
+                    type="submit"
+                    value="PAYER COMMANDE"
+                    data-key="{{ stripe_publishable_key }}"
+                    data-amount= "{{ order.totalPrice * 100 }}"
+                    data-name="Musée du Louvre"
+                    data-description="Billetterie"
+                    data-image="{{ asset('img/logo_black_png.PNG') }}"
+                    data-locale="auto"
+                    data-zip-code="false"
+                    data-currency="eur"
+                    data-email="{{ order.email }}"
+                />
 
+                <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $(':submit').on('click', function(event) {
+                            event.preventDefault();
+                            var $button = $(this),
+                                $form = $button.parents('form');
+                            var opts = $.extend({}, $button.data(), {
+                                token: function(result) {
+                                    $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+                                }
+                            });
+                            StripeCheckout.open(opts);
+                        });
+                    });
                 </script>
             </form>
         </div>
