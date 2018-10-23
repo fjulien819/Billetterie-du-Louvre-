@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+{% block title %}Erreur - {{ status_code }}{% endblock %}
+{% block body %}
+    <div class="d-flex flex-column text-center mt-5 mb-5">
+        <h2 class="text-white display-2">{{ status_code }}</h2>
+        <p class="lead text-white">
+           Une erreur s'est produite.
+        </p>
+        <a href="{{ path('homepage') }}" class="btn btn-light btn-lg" role="button" aria-pressed="true">Retourner à l'accueil</a>
+    </div>
+
+{% endblock %}
