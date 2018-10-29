@@ -44,17 +44,19 @@ class OrderController extends Controller
      */
     public function orderAction(Request $request, Cart $cart)
     {
-        if ($cart->fullCart()) {
+        $order = $cart->getOrder();
+
+        if ($cart->fullCart($order)) {
             return $this->redirectToRoute("summaryPage");
         }
 
-        $form = $this->createForm(TicketType::class, $cart->generateTicket());
+        $form = $this->createForm(TicketType::class, $cart->generateTicket($order));
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $cart->addTicket($form->getData());
+            $cart->addTicket($form->getData(), $order);
 
             return $this->redirectToRoute('orderPage');
         }
@@ -73,12 +75,10 @@ class OrderController extends Controller
      */
     public function summaryAction(Request $request, Cart $cart)
     {
+        $order = $cart->getOrder();
 
-
-        if($cart->fullCart())
+        if($cart->fullCart($order))
         {
-
-            $order = $cart->getOrder();
 
             if ($request->isMethod('POST'))
             {
