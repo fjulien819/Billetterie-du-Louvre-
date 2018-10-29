@@ -15,6 +15,7 @@ class TicketRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('t');
 
         $qb
+            ->select('COUNT(*)')
             ->leftJoin('t.orderTickets', 'o')
             ->addSelect('o')
             ->where('o.visiteDay = :date')
@@ -22,6 +23,6 @@ class TicketRepository extends \Doctrine\ORM\EntityRepository
 
         ;
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }
