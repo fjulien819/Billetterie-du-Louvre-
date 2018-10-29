@@ -18,7 +18,8 @@ use AppBundle\Services\SendEmail\SendEmail;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class CartTest extends TestCase
 {
@@ -34,35 +35,28 @@ class CartTest extends TestCase
     public function setUp()
     {
 
-        $this->sessionMock = $this
-            ->createMock(SessionInterface::class)
-        ;
+        $this->sessionMock = $session = new Session(new MockArraySessionStorage());
 
         $this->priceCalculatorMock = $this
             ->getMockBuilder(PriceCalculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['computeTicketPrice','computeTotalPrice'])
-            ->getMock()
-        ;
+            ->setMethods(['computeTicketPrice', 'computeTotalPrice'])
+            ->getMock();
 
         $this->checkoutMock = $this
             ->getMockBuilder(Checkout::class)
             ->disableOriginalConstructor()
             ->setMethods(['charge'])
-            ->getMock()
-        ;
+            ->getMock();
 
         $this->emMock = $this
-            ->createMock(EntityManagerInterface::class)
-
-        ;
+            ->createMock(EntityManagerInterface::class);
 
         $this->sendEmailMock = $this
             ->getMockBuilder(SendEmail::class)
             ->disableOriginalConstructor()
             ->setMethods(['sendTicket'])
-            ->getMock()
-        ;
+            ->getMock();
 
         $this->cart = new Cart($this->sessionMock, $this->priceCalculatorMock, $this->checkoutMock, $this->emMock, $this->sendEmailMock);
 
@@ -71,7 +65,6 @@ class CartTest extends TestCase
             ->setMethodsExcept(['payment'])
             ->setMethods(['getOrder'])
             ->getMock();
-
 
 
     }
@@ -94,48 +87,36 @@ class CartTest extends TestCase
 
         $this->cart->addTicket($ticket, $order);
 
-        $this->assertAttributeCount(1, 'tickets', $order );
+        $this->assertAttributeCount(1, 'tickets', $order);
 
     }
 
     public function testGetOrder()
     {
         $order = new Order();
-
-        $this->sessionMock
-            ->method('has')
-            ->willReturn(true)
-            ;
-
-        $this->sessionMock
-            ->method('get')
-            ->willReturn($order)
-        ;
+        $this->sessionMock->set(Cart::SESSION_ORDER_KEY, $order);
 
         $this->assertSame($order, $this->cart->getOrder());
     }
 
     public function testDeleteCart()
     {
-        $this->sessionMock
-            ->method('has')
-            ->willReturn(true)
-        ;
 
-        $this->sessionMock
-            ->method('remove')
-            ->willReturn(Order::class)
-        ;
-
-
+        $order = new Order();
+        $this->sessionMock->set(Cart::SESSION_ORDER_KEY, $order);
         $this->cart->deleteCart();
 
+        $this->assertSame(false, $this->sessionMock->has(Cart::SESSION_ORDER_KEY));
+
     }
+
     public function testSetOrder()
     {
 
         $order = new Order();
         $this->cart->setOrder($order);
+
+        $this->assertSame(true, $this->sessionMock->has(Cart::SESSION_ORDER_KEY));
 
     }
 
@@ -149,7 +130,6 @@ class CartTest extends TestCase
     }
 
 
-
     public function testNotFullCart()
     {
 
@@ -158,6 +138,7 @@ class CartTest extends TestCase
         $this->assertSame(false, $this->cart->fullCart($order));
 
     }
+
     public function testFullCart()
     {
 
@@ -171,7 +152,7 @@ class CartTest extends TestCase
     {
         $order = new Order();
         $ticket = $this->cart->generateTicket($order);
-        $this->assertSame($order, $ticket->getOrderTickets() );
+        $this->assertSame($order, $ticket->getOrderTickets());
 
     }
 
@@ -185,24 +166,16 @@ class CartTest extends TestCase
 
         $this->cartMock
             ->method('getOrder')
-            ->willReturn($order)
-        ;
+            ->willReturn($order);
 
         $this->checkoutMock
             ->method('charge')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
 
-        $this->assertTrue(  $this->cartMock->payment());
+        $this->assertTrue($this->cartMock->payment());
 
 
     }
-
-
-
-
-
-
 
 
 }
