@@ -45,13 +45,13 @@ class Cart
      * @param Ticket $ticket
      * @throws OrderNotFoundException
      */
-    public function addTicket(Ticket $ticket)
+    public function addTicket(Ticket $ticket, Order $order)
     {
 
-        if (!$this->fullCart()) {
+        if (!$this->fullCart($order)) {
             $this->priceCalculator->computeTicketPrice($ticket);
-            $this->getOrder()->addTicket($ticket);
-            $this->priceCalculator->computeTotalPrice($this->getOrder());
+            $order->addTicket($ticket);
+            $this->priceCalculator->computeTotalPrice($order);
         }
 
     }
@@ -85,9 +85,9 @@ class Cart
     }
 
     public function setOrder(Order $order)
-    {
-        $this->session->set(self::SESSION_ORDER_KEY, $order);
-    }
+{
+    $this->session->set(self::SESSION_ORDER_KEY, $order);
+}
 
     public function generateIdOrder()
     {
@@ -105,10 +105,10 @@ class Cart
      * @return bool
      * @throws OrderNotFoundException
      */
-    public function fullCart()
+    public function fullCart(Order $order)
     {
-        $nbrTickets = $this->getOrder()->getNbrTickets();
-        if (count($this->getOrder()->getTickets()) < $nbrTickets) {
+        $nbrTickets = $order->getNbrTickets();
+        if (count($order->getTickets()) < $nbrTickets) {
             return false;
         }
         return true;
@@ -120,10 +120,11 @@ class Cart
      * @return Ticket
      * @throws OrderNotFoundException
      */
-    public function generateTicket()
+    public function generateTicket(Order $order)
     {
         $ticket = new Ticket();
-        return $ticket->setOrderTickets($this->getOrder());
+        $ticket->setOrderTickets($order);
+        return $ticket;
 
     }
 
