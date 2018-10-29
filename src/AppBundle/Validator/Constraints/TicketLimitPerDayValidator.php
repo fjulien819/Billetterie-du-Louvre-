@@ -37,24 +37,12 @@ class TicketLimitPerDayValidator extends ConstraintValidator
 
             /** @var TicketRepository $repo */
             $repo = $this->em->getRepository(Ticket::class);
-            $nbrTicket =  count($repo->getNbrTickets($value->getVisiteDay()));
+            $nbrTicket =  $repo->getNbrTickets($value->getVisiteDay());
 
-            //si limit 0 ticketforSale = negatif
-            if ($constraint->limit === 0)
-            {
-                $ticketForSale = 0;
-            }
-            else
+
+            if (($value->getNbrTickets()+ $nbrTicket) > $constraint->limit)
             {
                 $ticketForSale = $constraint->limit - $nbrTicket ;
-            }
-
-
-            $nbrTicket += $value->getNbrTickets();
-
-            if ($nbrTicket > $constraint->limit)
-            {
-
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('{{ ticketForSale }}', $ticketForSale)
                     ->atPath('nbrTickets')

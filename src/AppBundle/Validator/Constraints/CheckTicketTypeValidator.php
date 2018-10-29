@@ -24,9 +24,9 @@ class CheckTicketTypeValidator extends ConstraintValidator
     const H_LIMIT = 14;
 
 
-    public function __construct()
+    public function __construct($currentDate = null )
     {
-        $this->currentDate = new \DateTime();
+        $this->currentDate = new \DateTime($currentDate);
         $this->limitTime = new \DateTime();
         $timeZone = new \DateTimeZone(self::TIMEZONE);
         $this->currentDate->setTimezone($timeZone);
@@ -41,7 +41,7 @@ class CheckTicketTypeValidator extends ConstraintValidator
     public function validate($object, Constraint $constraint)
     {
 
-        if($object instanceof \DateTime)
+        if($object->getVisiteDay() instanceof \DateTime)
         {
 
             if ($this->currentDate->format('Y-m-d') === $object->getVisiteDay()->format('Y-m-d'))
