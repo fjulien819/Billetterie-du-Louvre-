@@ -58,7 +58,9 @@ class OrderController extends Controller
 
             $cart->addTicket($form->getData(), $order);
 
-            return $this->redirectToRoute('orderPage');
+            if ($cart->fullCart($order)) {
+                return $this->redirectToRoute("summaryPage");
+            }
         }
         return $this->render('default/order.html.twig', array('form' => $form->createView(), 'order' => $cart->getOrder()
         ));

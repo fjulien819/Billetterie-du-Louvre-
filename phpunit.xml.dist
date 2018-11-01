@@ -10,6 +10,9 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <server name="KERNEL_CLASS" value="AppKernel" />
+
+
+
     </php>
 
     <testsuites>
