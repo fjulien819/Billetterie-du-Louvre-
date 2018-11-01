@@ -15,9 +15,9 @@ class TicketRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('t');
 
         $qb
-            ->select('COUNT(*)')
+
+            ->select('COUNT(t)')
             ->leftJoin('t.orderTickets', 'o')
-            ->addSelect('o')
             ->where('o.visiteDay = :date')
             ->setParameter('date', $date)
 
