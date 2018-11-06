@@ -52,6 +52,7 @@
         </div>
         <div class="card-footer d-flex  justify-content-between">
             <a class="btn btn-dark btn-sm" href="{{ path('homepage') }}" role="button">ACCUEIL</a>
+            {% if order.totalPrice > 0 %}
             <form action="{{ path('summaryPage') }}" method="POST">
                 <noscript>You must <a href="http://www.enable-javascript.com" target="_blank">enable JavaScript</a> in your web browser in order to pay via Stripe.</noscript>
                 <input class="btn btn-dark btn-sm"
@@ -86,6 +87,13 @@
                     });
                 </script>
             </form>
+            {% else %}
+            <form action="{{ path('summaryPage') }}" method="POST">
+                <input class="btn btn-dark btn-sm"
+                       type="submit"
+                       value="VALIDER COMMANDE"
+                />
+            {% endif %}
         </div>
     </div>
 {% endblock %}

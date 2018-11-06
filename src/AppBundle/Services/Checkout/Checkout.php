@@ -31,18 +31,24 @@ class Checkout
 
     public function charge($orderId, $totalPrice, $description)
     {
-        Stripe::setApiKey($this->apiKey);
-        try {
-            $token = $this->request->get('stripeToken');
-            Charge::create([
-                'amount' => $totalPrice * 100,
-                'currency' => 'EUR',
-                'description' => $description,
-                'source' => $token,
-                'metadata' => ['order_id' => $orderId]
-            ]);
-        } catch (\Exception $e) {
-            return false;
+        if (!$totalPrice ==  0)
+        {
+            Stripe::setApiKey($this->apiKey);
+            try {
+                $token = $this->request->get('stripeToken');
+                Charge::create([
+                    'amount' => $totalPrice * 100,
+                    'currency' => 'EUR',
+                    'description' => $description,
+                    'source' => $token,
+                    'metadata' => ['order_id' => $orderId]
+                ]);
+            } catch (\Exception $e) {
+                return false;
+            }
+
+            return true;
+
         }
 
         return true;
