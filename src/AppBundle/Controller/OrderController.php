@@ -60,6 +60,8 @@ class OrderController extends Controller
 
             if ($cart->fullCart($order)) {
                 return $this->redirectToRoute("summaryPage");
+            }else{
+                return $this->redirectToRoute("orderPage");
             }
         }
         return $this->render('default/order.html.twig', array('form' => $form->createView(), 'order' => $cart->getOrder()
