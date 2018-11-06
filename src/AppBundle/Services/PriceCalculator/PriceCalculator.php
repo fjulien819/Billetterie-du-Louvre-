@@ -29,6 +29,8 @@ class PriceCalculator
     const AGE_ADULTE = 12;
     const AGE_SENIOR = 60;
 
+    const COEF_PRICE_HALF_DAY = 0.5;
+
 
     /**
      * @param Ticket $ticket
@@ -38,35 +40,37 @@ class PriceCalculator
 
         $order = $ticket->getOrderTickets();
 
-        $price = self::TARIF_REDUIT;
+        $price = 0;
 
         if (!$ticket->getReducedPrice())
         {
+            $birthDate = $ticket->getBirthDate();
+            $visiteDay = $order->getVisiteDay();
 
-            $birthDate = new \DateTime();
-            $visiteDay = new \DateTime();
+            $interval = $birthDate->diff($visiteDay)->format('%y');
 
-            $birthDate->setTimestamp($ticket->getBirthDate()->getTimestamp());
-            $visiteDay->setTimestamp($order->getVisiteDay()->getTimestamp());
+                switch (true) {
+                    case (($interval >= self::AGE_ENFANT) && ($interval < self::AGE_ADULTE)):
+                        $price = self::TARIF_ENFANT;
+                        break;
+                    case (($interval >= self::AGE_ADULTE) && ($interval < self::AGE_SENIOR)):
+                        $price = self::TARIF_NORMAL;
+                        break;
+                    case ($interval >= self::AGE_SENIOR):
+                        $price = self::TARIF_SENIOR;
+                        break;
+                }
 
-            $diff = $visiteDay->diff($birthDate)->format("%y%");
-
-            switch ($diff) {
-                case ($diff < self::AGE_ENFANT):
-                    $price = 0;
-                    break;
-                case ($diff >= self::AGE_ENFANT) && ($diff < self::AGE_ADULTE):
-                    $price = self::TARIF_ENFANT;
-                    break;
-                case ($diff >= self::AGE_ADULTE) && ($diff < self::AGE_SENIOR):
-                    $price = self::TARIF_NORMAL;
-                    break;
-                case ($diff >= self::AGE_SENIOR):
-                    $price = self::TARIF_SENIOR;
-                    break;
-            }
+        }
+        else {
+            $price = self::TARIF_REDUIT;
+        }
 
 
+        if ($order->getTicketType() === Order::TYPE_HALF_DAY)
+        {
+            $reduction = $price * self::COEF_PRICE_HALF_DAY;
+            $price = $price - $reduction;
         }
 
         $ticket->setPrice($price);

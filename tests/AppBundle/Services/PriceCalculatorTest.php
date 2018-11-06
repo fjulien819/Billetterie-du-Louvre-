@@ -86,10 +86,10 @@ class PriceCalculatorTest extends TestCase
     public function  dateForComputeTicketPrice()
     {
         return [
-            [2000-01-01, 2018-01-01, PriceCalculator::TARIF_NORMAL, false],
-            [2014-01-01, 2018-01-01, PriceCalculator::TARIF_ENFANT, false],
-            [1900-01-01, 2018-01-01, PriceCalculator::TARIF_SENIOR, false],
-            [1900-01-01, 2018-01-01, PriceCalculator::TARIF_REDUIT, true]
+            ["2000-01-01", "2018-01-01", PriceCalculator::TARIF_NORMAL, false],
+            ["2014-01-01", "2018-01-01", PriceCalculator::TARIF_ENFANT, false],
+            ["1900-01-01", "2018-01-01", PriceCalculator::TARIF_SENIOR, false],
+            ["1900-01-01", "2018-01-01", PriceCalculator::TARIF_REDUIT, true]
         ];
     }
 
