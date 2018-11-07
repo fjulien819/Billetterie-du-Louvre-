@@ -37,11 +37,5 @@ monolog:
         #    type: chromephp
         #    level: info
 
-swiftmailer:
-    spool:     { type: memory }
-    transport: '%transport%'
-    host:      '%host%'
-    username:  '%username%'
-    password:  '%password%'
-    auth_mode: '%auth_mode%'
-    port: '%port%'
+
+
