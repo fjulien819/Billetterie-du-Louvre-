@@ -12,7 +12,7 @@ use AppBundle\Validator\Constraints as LouvreAssert;
  * @ORM\Table(name="order_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderTicketsRepository")
  * @LouvreAssert\CheckTicketType()
- * @LouvreAssert\TicketLimitPerDay(limit=Order::TICKET_lIMIT_PER_DAY)
+ * @LouvreAssert\TicketLimitPerDay(limit=Order::TICKET_LIMIT_PER_DAY)
  */
 class Order
 {
@@ -20,7 +20,7 @@ class Order
     const TYPE_HALF_DAY = "demiJournee";
     const MIN_TICKETS_COUNT = 1;
     const MAX_TICKETS_COUNT = 10;
-    const TICKET_lIMIT_PER_DAY = 1000;
+    const TICKET_LIMIT_PER_DAY = 1000;
 
 
     /**
