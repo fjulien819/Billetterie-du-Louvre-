@@ -2,7 +2,18 @@
 # https://symfony.com/doc/current/service_container.html
 parameters:
     #parameter_name: value
-    stripe_secret_key: sk_test_PvRPdtQtuQZNAhoJeQvKg65o
+    stripe_secret_key: sk_test_mIfRo0mAJxtoInOY3TVCvxVv
+
+    tarif_enfant: 8
+    tarif_normal: 16
+    tarif_senior: 12
+    tarif_reduit: 10
+
+    age_enfant: 4
+    age_adulte: 12
+    age_senior: 60
+
+    coef_price_half_day: 0.5
 
 services:
     # default configuration for services in *this* file
@@ -47,5 +58,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
+    AppBundle\Services\PriceCalculator\PriceCalculator:
 
-
+        arguments:
+            ['%tarif_enfant%',
+            '%tarif_normal%',
+            '%tarif_senior%',
+            '%tarif_reduit%',
+            '%age_enfant%',
+            '%age_adulte%',
+            '%age_senior%',
+            '%coef_price_half_day%']

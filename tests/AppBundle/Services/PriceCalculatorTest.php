@@ -39,7 +39,7 @@ class PriceCalculatorTest extends TestCase
 
         $ticket->setOrderTickets($order);
 
-        $priceCalculator = new PriceCalculator();
+        $priceCalculator = new PriceCalculator(8, 16, 12, 10, 4, 12, 60, 0.5 );
 
         $priceCalculator->computeTicketPrice($ticket);
         $result = $ticket->getPrice();
@@ -63,7 +63,10 @@ class PriceCalculatorTest extends TestCase
            $ticket->setPrice($price);
            $order->addTicket($ticket);
         }
-        $priceCalculator = new PriceCalculator();
+
+
+
+        $priceCalculator = new PriceCalculator(8, 16, 12, 10, 4, 12, 60, 0.5 );
 
         $priceCalculator->computeTotalPrice($order);
         $result = $order->getTotalPrice();
@@ -76,22 +79,23 @@ class PriceCalculatorTest extends TestCase
     public function  pricesForComputeTotalPrice()
     {
         return [
-            [[PriceCalculator::TARIF_ENFANT, PriceCalculator::TARIF_NORMAL], 24],
-            [[PriceCalculator::TARIF_NORMAL, PriceCalculator::TARIF_NORMAL], 32],
-            [[PriceCalculator::TARIF_SENIOR, PriceCalculator::TARIF_NORMAL], 28],
-            [[PriceCalculator::TARIF_REDUIT, PriceCalculator::TARIF_ENFANT], 18]
+            [["8", "16"], 24],
+            [["16", "16"], 32],
+            [["12", "16"], 28],
+            [["10", "8"], 18]
         ];
     }
 
     public function  dateForComputeTicketPrice()
     {
         return [
-            ["2000-01-01", "2018-01-01", PriceCalculator::TARIF_NORMAL, false],
-            ["2014-01-01", "2018-01-01", PriceCalculator::TARIF_ENFANT, false],
-            ["1900-01-01", "2018-01-01", PriceCalculator::TARIF_SENIOR, false],
-            ["1900-01-01", "2018-01-01", PriceCalculator::TARIF_REDUIT, true]
+            ["2000-01-01", "2018-01-01", 16, false],
+            ["2014-01-01", "2018-01-01", 8, false],
+            ["1900-01-01", "2018-01-01", 12, false],
+            ["1900-01-01", "2018-01-01", 10, true]
         ];
     }
+
 
 
 }

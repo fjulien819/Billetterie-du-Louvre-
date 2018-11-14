@@ -20,17 +20,30 @@ class PriceCalculator
 {
 
 
-    const TARIF_ENFANT = "8";
-    const TARIF_NORMAL = "16";
-    const TARIF_SENIOR = "12";
-    const TARIF_REDUIT = "10";
+    private $tarif_enfant;
+    private $tarif_normal;
+    private $tarif_senior;
+    private $tarif_reduit;
 
-    const AGE_ENFANT = 4;
-    const AGE_ADULTE = 12;
-    const AGE_SENIOR = 60;
+    private $age_enfant;
+    private $age_adulte;
+    private $age_senior;
 
-    const COEF_PRICE_HALF_DAY = 0.5;
+    private $coef_price_half_day;
 
+    public function __construct($tarif_enfant, $tarif_normal, $tarif_senior, $tarif_reduit, $age_enfant, $age_adulte, $age_senior, $coef_price_half_day)
+    {
+        $this->tarif_enfant = $tarif_enfant;
+        $this->tarif_normal = $tarif_normal;
+        $this->tarif_senior = $tarif_senior;
+        $this->tarif_reduit = $tarif_reduit;
+
+        $this->age_enfant = $age_enfant;
+        $this->age_adulte = $age_adulte;
+        $this->age_senior = $age_senior;
+
+        $this->coef_price_half_day = $coef_price_half_day;
+    }
 
     /**
      * @param Ticket $ticket
@@ -50,26 +63,26 @@ class PriceCalculator
             $interval = $birthDate->diff($visiteDay)->format('%y');
 
                 switch (true) {
-                    case (($interval >= self::AGE_ENFANT) && ($interval < self::AGE_ADULTE)):
-                        $price = self::TARIF_ENFANT;
+                    case (($interval >= $this->age_enfant) && ($interval < $this->age_adulte)):
+                        $price = $this->tarif_enfant;
                         break;
-                    case (($interval >= self::AGE_ADULTE) && ($interval < self::AGE_SENIOR)):
-                        $price = self::TARIF_NORMAL;
+                    case (($interval >= $this->age_adulte) && ($interval < $this->age_senior)):
+                        $price = $this->tarif_normal;
                         break;
-                    case ($interval >= self::AGE_SENIOR):
-                        $price = self::TARIF_SENIOR;
+                    case ($interval >= $this->age_senior):
+                        $price = $this->tarif_senior;
                         break;
                 }
 
         }
         else {
-            $price = self::TARIF_REDUIT;
+            $price = $this->tarif_reduit;
         }
 
 
         if ($order->getTicketType() === Order::TYPE_HALF_DAY)
         {
-            $reduction = $price * self::COEF_PRICE_HALF_DAY;
+            $reduction = $price * $this->coef_price_half_day;
             $price = $price - $reduction;
         }
 
